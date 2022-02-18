@@ -1,5 +1,16 @@
 apiVersion: v1
 entries:
+  certs:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-02-18T16:42:15.701890541Z"
+    description: A Helm chart for managing Let's encrypt certificates
+    digest: c92ef901eae3a6950749fc5fe18e1624a9b62953b43ed10ea15cd004c63c072d
+    name: certs
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/certs-1.1.9/certs-1.1.9.tgz
+    version: 1.1.9
   fluentbit:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -22,4 +33,4 @@ entries:
     urls:
     - https://schmitzis.github.io/helm-charts/helm-chart-test-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-18T16:36:59.280389641Z"
+generated: "2022-02-18T16:42:15.702028343Z"
