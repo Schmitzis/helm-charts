@@ -1,5 +1,16 @@
 apiVersion: v1
 entries:
+  fluentbit:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-02-18T16:36:59.280385541Z"
+    description: A FluentBit Helm chart for Kubernetes
+    digest: a43e952d0901039990f4f962c6facb8c80ea2ed70031ed00ee18537ef3708c91
+    name: fluentbit
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/fluentbit-0.1.0/fluentbit-0.1.0.tgz
+    version: 0.1.0
   helm-chart-test:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -11,4 +22,4 @@ entries:
     urls:
     - https://schmitzis.github.io/helm-charts/helm-chart-test-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-18T17:15:04.890699793+01:00"
+generated: "2022-02-18T16:36:59.280389641Z"
