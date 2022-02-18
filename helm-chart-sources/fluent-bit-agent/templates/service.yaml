@@ -1,0 +1,14 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "fluent-bit-agent.resname" . }}
+  labels: {{ include "fluent-bit-agent.labels" . | indent 4 }}
+    component: agent
+spec:
+  selector: {{ include "fluent-bit-agent.labels-selector" . | indent 4 }}
+    component: agent
+  ports:
+    - name: metrics
+      port: 2020
+      targetPort: 2020

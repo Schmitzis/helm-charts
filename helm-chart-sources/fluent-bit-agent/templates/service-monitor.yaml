@@ -1,0 +1,23 @@
+{{ if .Values.prometheus.serviceMonitor.enable }}
+---
+kind: ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: {{ template "fluent-bit-agent.resname" . }}
+  labels: {{ include "fluent-bit-agent.labels" . | indent 4 }}
+    component: agent
+    {{ range $k, $v := .Values.prometheus.serviceMonitor.labels }}
+    {{- $k }}: {{ $v | quote }}
+    {{ end }}
+spec:
+  jobLabel: {{ template "fluent-bit-agent.resname" . }}-metrics
+  selector:
+    matchLabels: {{ include "fluent-bit-agent.labels-selector" . | indent 6 }}
+      component: agent
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace | quote }}
+  endpoints:
+    - port: metrics
+      path: /api/v1/metrics/prometheus
+{{ end }}

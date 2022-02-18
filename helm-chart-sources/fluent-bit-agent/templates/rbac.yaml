@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "fluent-bit-agent.resname" . }}-read
+rules:
+- apiGroups: [""]
+  resources:
+  - namespaces
+  - pods
+  - nodes
+  - nodes/proxy
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "fluent-bit-agent.resname" . }}
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "fluent-bit-agent.resname" . }}-read
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "fluent-bit-agent.resname" . }}-read
+subjects:
+- kind: ServiceAccount
+  name: {{ template "fluent-bit-agent.resname" . }}
+  namespace: {{ .Release.Namespace }}

@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fluent-bit-agent.resname" . }}
+  labels: {{ include "fluent-bit-agent.labels" . | indent 4 }}
+    component: agent
+data:
+
+    fluent-bit.conf: |
+        [SERVICE]
+            Flush         1
+            Log_Level     info
+            Daemon        off
+            Parsers_File  parsers.conf
+            HTTP_Server   On
+            HTTP_Listen   0.0.0.0
+            HTTP_Port     2020
+        
+        @INCLUDE inputs.conf
+        @INCLUDE filters.conf
+
+        {{ if .Values.outputs.gelf.enable }}
+        [OUTPUT]
+            Name    gelf
+            Match   *
+            Host    {{ .Values.outputs.gelf.host }}
+            Port    {{ .Values.outputs.gelf.port }}
+            Mode    {{ .Values.outputs.gelf.mode }}
+            Gelf_Short_Message_Key short_message
+        {{ end }}
+        
+        #[OUTPUT]
+        #    Name    stdout
+        #    Match   kern.*
+        #
+        #[OUTPUT]
+        #    Name    stdout
+        #    Match   msg.*
+        #
+        #[OUTPUT]
+        #    Name    stdout
+        #    Match   systemd.*
+        
+        
+    {{ $currentScope := .}}
+    {{- range $path, $_ :=  .Files.Glob  "config/*" }}
+        {{- with $currentScope}}
+    {{ trimPrefix "config/" $path  }}: |
+{{ .Files.Get $path | indent 8 }}
+        {{- end }}
+    {{ end }}
+
+    

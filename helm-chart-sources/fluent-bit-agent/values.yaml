@@ -1,0 +1,25 @@
+repository: fluent/fluent-bit
+tag: "1.8"
+imagePullPolicy: Always
+revision: v1
+
+outputs:
+  gelf:
+    enable: false
+    host: ""
+    port: 12201
+    mode: tcp
+
+resources:
+  requests:
+    cpu: "50m"
+    memory: "100Mi"
+  limits:
+    cpu: "100m"
+    memory: "200Mi"
+
+prometheus:
+  serviceMonitor:
+    enable: true
+    labels:
+      monitor-group: "k8s"
