@@ -1,4 +1,0 @@
-apiVersion: v2
-name: certs
-description: A Helm chart for managing Let's encrypt certificates
-version: 1.1.12

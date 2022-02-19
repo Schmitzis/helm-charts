@@ -1,25 +1,24 @@
 
-# Index File
-```bash
-helm repo index --url https://schmitzis.github.io/helm-charts .
+# Schmitzis Helm Charts
+
+
+## Usage
+
+[Helm](https://helm.sh) must be installed to use the charts.
+Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
+
+Once Helm is set up properly, add the repo as follows:
+
+```console
+$ helm repo add schmitzis https://schmitzis.github.io/helm-charts/
 ```
 
-# Lint
-```bash
-helm lint helm-chart-sources/*
-```
+You can then run `helm search repo schmitzis` to see the charts.
 
-# Package
-```bash
-helm package helm-chart-sources/*
-```
+## Contributing
 
-# Helm Repo Add
-```bash
-helm repo add schmitzs https://schmitzis.github.io/helm-charts/
-```
+TBD
 
-# Helm Repo Add incremental
-```bash
-helm repo index --url https://schmitzis.github.io/helm-charts/ --merge index.yaml .
-```
+## License
+
+[Apache 2.0 License](./LICENSE).

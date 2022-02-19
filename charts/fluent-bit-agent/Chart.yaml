@@ -1,5 +1,0 @@
-apiVersion: v2
-name: fluent-bit-agent
-description: Fluent Bit Agent
-version: 0.0.1
-appVersion: "4.9.7"
