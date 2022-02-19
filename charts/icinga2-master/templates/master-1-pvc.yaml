@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "icinga2.resname" . }}-master-1
+  labels: {{ include "icinga2.labels" . | indent 4 }}
+    component: icinga2-master-1
+
+spec:
+  storageClassName: {{ .Values.icinga2.master1.pvc.storageClass }}
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.icinga2.master1.pvc.size }}

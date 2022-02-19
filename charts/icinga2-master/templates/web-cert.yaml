@@ -1,0 +1,21 @@
+{{ if .Values.icinga2.web.certManagerIssuer }}
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ template "icinga2.resname" . }}-web
+  labels: {{ include "icinga2.labels" . | indent 4 }}
+    component: web
+
+spec:
+  secretName: {{ template "icinga2.resname" . }}-web-tls
+  issuerRef:
+    name: {{ .Values.icinga2.web.certManagerIssuer }}
+    kind: ClusterIssuer
+  dnsNames:
+  - {{ .Values.icinga2.web.hostname }}
+  {{ if .Values.grafana.ingress.enabled }}
+  - grafana.{{ .Values.icinga2.web.hostname }}
+  {{ end }}
+
+{{ end }}

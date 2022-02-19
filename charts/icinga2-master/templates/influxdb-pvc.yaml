@@ -1,0 +1,18 @@
+{{ if .Values.icinga2.influxdb.enable }}
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "icinga2.resname" . }}-influxdb
+  labels: {{ include "icinga2.labels" . | indent 4 }}
+    component: influxdb
+
+spec:
+  storageClassName: {{ .Values.icinga2.influxdb.pvc.storageClass }}
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.icinga2.influxdb.pvc.size }}
+
+{{ end }}

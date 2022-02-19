@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "icinga2.resname" . }}-master-1
+  labels: {{ include "icinga2.labels" . | indent 4 }}
+    component: icinga2-master-1
+
+spec:
+
+  selector: {{ include "icinga2.labels-selector" . | indent 4 }}
+    component: icinga2-master-1
+
+  ports:
+    - name: icinga2
+      port: 5665
+      targetPort: 5665
+    {{ if .Values.icinga2.IcingaDB -}}
+    - name: redis
+      port: 6380
+      targetPort: 6380
+    {{- end }}
+    - name: certsvc
+      port: 8080
+      targetPort: 8080

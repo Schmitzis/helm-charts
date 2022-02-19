@@ -1,0 +1,265 @@
+icinga2:
+
+  k8sClusterDomain: svc.cluster.local
+  nodeLocalDnsIp: "169.254.20.10"
+  IcingaDB: false
+  IngressClass: haproxy
+
+  web:
+    repository: registry.gitlab.com/olemisea/icingaweb2
+    tag: "2.9.5"
+    hostname: icinga2.ops.dhswt.de
+    imagePullPolicy: IfNotPresent
+    imagePullSecret: ""
+    certManagerIssuer: ""
+    waitForMasterUptime: 25
+    tlsSecret: ""
+    initContainers: []
+    # modules
+    aws: false
+    businessprocess: true
+    cube: false
+    director: true
+    fileshipper: false
+    globe: false
+    idoreports: false
+    map: true
+    pdf: false
+    reporting: true
+    toplevelview: false
+    vspheredb: false
+    x509: false
+
+  master:
+    repository: registry.gitlab.com/olemisea/icinga2
+    tag: "stable-2.13.2-master"
+    imagePullPolicy: IfNotPresent
+    imagePullSecret: ""
+    # generate ticket salt with: openssl rand -base64 30
+    ticketSalt: "ChangeMe123"
+    externalPort: "5665"
+
+  auth:
+    cmdApiUser: "root"
+    cmdApiPass: "ChangeMe123"
+    apiPromUser: "prometheus"
+    apiPromPass: "ChangeMe123"
+    apiHACheckUser: "ha-api"
+    apiHACheckPass: "ChangeMe123"
+    agentDeployUser: "ansible"
+    agentDeployPass: "ChangeMe123"
+    # web passwords are seed only, wont be updated after kickstart
+    webRootUser: "icinga"
+    webRootPass: "ChangeMe123"
+    webDirectorUser: "director"
+    webDirectorPass: "ChangeMe123"
+
+  msmtp:
+    relayServer: ""
+    rewriteDomain: ""
+    relayUseStartTLS: ""
+    senderEmail: ""
+    smtpAuthUser: ""
+    smtpAuthPass: ""
+    recvRoot: ""
+    accName: ""
+
+  mysql:
+    host: icinga2-mysql
+    port: "3306"
+    rootUser: root
+    rootPass: "ChangeMe12345"
+
+    ic2UserPrefix: ""
+    ic2UserPass: "ChangeMe123"
+    ic2DbPrefix: "icinga2_"
+
+  influxdb:
+    enable: false
+    version: "v1"
+    repository: influxdb
+    tag: "1.7"
+    imagePullPolicy: IfNotPresent
+    imagePullSecret: ""
+    port: "8086"
+
+    adminUser: "root"
+    adminPass: "ChangeMe123"
+    db: "icinga2"
+    user: "icinga2"
+    pass: "ChangeMe123"
+
+    # v2
+    adminToken: ""
+    organization: monitoring
+    bucket: icinga2
+    retention: "4w"
+    token: ""
+    pvc:
+      storageClass: "default"
+      size: 10Gi
+
+  grafana:
+    host: ""
+    port: "443"
+    protocol: "https"
+    mode: "iframe"
+    token: ""
+    publicUrl: ""
+    authentication: "anon"
+    authenticationUsername: ""
+    authenticationPassword: ""
+    publicProtocol: "https"
+    dashboardUid: "Y07mGBtmk"
+    timerange: "1h"
+    timerange_all: "7d"
+
+  graphite:
+    enable: false
+    host: ""
+    port: 2003
+
+  master1:
+    hostname: master-1.test.com
+    CanonicalName: master-1
+    nodeAffinity: []
+    pvc:
+      storageClass: "default"
+      size: 10Gi
+    initContainers: []
+
+  master2:
+    hostname: master-2.test.com
+    CanonicalName: master-2
+    nodeAffinity: []
+    externalPort: 443
+    pvc:
+      storageClass: "default"
+      size: 10Gi
+    initContainers: []
+
+#resources:
+#  requests:
+#    cpu: "200m"
+#    memory: "200Mi"
+#  limits:
+#    cpu: "300m"
+#    memory: "500Mi"
+
+grafana:
+  # enable/disable sub-chart
+  enabled: true
+
+  rbac:
+    create: true
+    pspEnabled: false
+    pspUseAppArmor: false
+    namespaced: true
+
+  ingress:
+    enabled: false
+    annotations:
+      ingress.kubernetes.io/ssl-redirect: 'true'
+      # cert-manager.io/cluster-issuer: "letsencrypt-production"
+      kubernetes.io/ingress.class: haproxy
+    labels: {}
+    path: /
+    hosts:
+      - grafana.icinga2-monitoring.de
+    tls:
+      - secretName: ingress-tls-grafana
+        hosts:
+          - grafana.icinga2-monitoring.de
+
+  persistence:
+    enabled: false
+    storageClassName: rook-ceph-block
+    size: 1Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+
+  adminUser: ChangeMe123
+  adminPassword: ChangeMe123
+
+  env:
+    GF_EXPLORE_ENABLED: true
+    GF_RENDERING_SERVER_URL: http://grafana-image-renderer:8081/render
+    GF_RENDERING_CALLBACK_URL: http://grafana
+    GF_LOG_FILTERS: rendering:debug
+
+  grafana.ini:
+    users:
+      viewers_can_edit: false
+    auth:
+      disable_login_form: false
+      disable_signout_menu: false
+    auth.anonymous:
+      enabled: true
+      org_role: Viewer
+    security:
+      allow_embedding: true
+    server:
+      root_url: https://grafana.example.de # this host can be localhost
+
+  ## Pass the plugins you want installed as a list.
+  ##
+  #plugins:
+  #  - grafana-clock-panel
+  #  - grafana-simple-json-datasource
+  #  - jdbranham-diagram-panel
+  #  - snuids-trafficlights-panel
+  #  - grafana-piechart-panel
+  #  - natel-discrete-panel
+
+  ## Configure grafana datasources
+  ## ref: http://docs.grafana.org/administration/provisioning/#datasources
+  ##
+  datasources:
+    # todo better altenative then forcing user to copy entire file
+    datasources.yaml:
+      # config file version
+      apiVersion: 1
+
+      deleteDatasources:
+        - name: Icinga2
+          orgId: 1
+
+      datasources:
+        - name: Icinga2
+          type: influxdb
+          access: proxy
+          database: icinga2
+          user: icinga2
+          password: ChangeMe123
+          url: http://icinga2-influxdb:8086
+          editable: true
+          jsonData:
+            timeInterval: "15s"
+
+  ## Configure grafana dashboard providers
+  ## ref: http://docs.grafana.org/administration/provisioning/#dashboards
+  ##
+  ## `path` must be /var/lib/grafana/dashboards/<provider_name>
+  ##
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+  dashboards:
+    default:
+      Icinga2-Default:
+        url: https://michaelstefanschmitz.de/grafana/icinga2-default.json
+      Icinga2-Influxd:
+        url: https://michaelstefanschmitz.de/grafana/icinga2-influxdb-host.json
+
+  deploymentStrategy:
+    type: Recreate

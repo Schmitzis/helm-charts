@@ -1,0 +1,67 @@
+{{ if .Values.icinga2.influxdb.enable }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "icinga2.resname" . }}-influxdb
+  labels: {{ include "icinga2.labels" . | indent 4 }}
+    revision: {{ .Release.Revision | quote }}
+    component: influxdb
+  
+spec:
+
+  replicas: 1
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels: {{ include "icinga2.labels-selector" . | indent 6 }}
+      component: influxdb
+
+  template:
+
+    metadata:
+      labels: {{ include "icinga2.labels" . | indent 8 }}
+        revision: {{ .Release.Revision | quote }}
+        component: influxdb
+  
+    spec:
+      # this prevents env variables for services in this namespace from being generated, as those might conflict
+      enableServiceLinks: false
+
+      {{ if .Values.icinga2.influxdb.imagePullSecret -}}
+      imagePullSecrets:
+      - name: {{ .Values.icinga2.influxdb.imagePullSecret }}
+      {{- end }}
+      
+      containers:
+        - name: influxdb
+          image: {{ .Values.icinga2.influxdb.repository }}:{{ .Values.icinga2.influxdb.tag }}
+          # command: ["sleep", "1000000"]
+          imagePullPolicy: {{ .Values.icinga2.influxdb.imagePullPolicy }}
+          
+          ports:
+            - containerPort: 8086
+          
+          envFrom:
+          - secretRef:
+              name: {{ template "icinga2.resname" . }}-influxdb
+
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/influxdb
+              subPath: data
+          
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "500Mi"
+            limits:
+              memory: "2000Mi"
+      
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ template "icinga2.resname" . }}-influxdb
+
+{{ end }}

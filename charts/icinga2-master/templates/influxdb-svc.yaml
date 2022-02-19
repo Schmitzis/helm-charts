@@ -1,0 +1,20 @@
+{{ if .Values.icinga2.influxdb.enable }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "icinga2.resname" . }}-influxdb
+  labels: {{ include "icinga2.labels" . | indent 4 }}
+    component: influxdb
+
+spec:
+
+  selector: {{ include "icinga2.labels-selector" . | indent 4 }}
+    component: influxdb
+
+  ports:
+    - name: http
+      port: 8086
+      targetPort: 8086
+
+{{ end }}

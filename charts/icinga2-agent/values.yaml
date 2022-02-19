@@ -1,0 +1,105 @@
+image:
+  repository: "registry.gitlab.com/olemisea/icinga2-agent-docker"
+  tag: "minion-0.8"
+imagePullPolicy: IfNotPresent
+revision: v1
+imagePullSecret: ""
+imagePullSecrets: []
+
+director:
+  uri: "https://icinga2.example.com/icinga/director"
+  user: "director"
+  pass: "pass"
+
+master:
+  ip: "master1.icinga2.example.com"
+  ip2: "" # master2.icinga2.example.com
+  port: 5665
+
+kubernetes:
+  host: "kubernetes.default"
+  port: "443"
+  scheme: "https"
+  token: ""
+
+autoscaling:
+  enabled: false
+
+agent:
+  enable: true
+  push: 0
+  networkInterface: "eth0"
+  hostDistribution: "" # auto-detected if possible
+  hostDistributionVersion: ""  # auto-detected if possible
+  rootDevice: "" # auto-detected if possible
+  instanceType: "cloud"
+  detectIngress: "true"
+  haproxy_URL: "http://172.17.0.1:1936/;csv"
+
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "200Mi"
+    limits:
+      cpu: "300m"
+      memory: "500Mi"
+
+  # environemnt vars to pass to the container, for example for VARS_xxxx config
+  env:
+    K8S_AUTO_DEREGISTER: "1"
+
+checkProviderSidecars: []
+  # - name: someprovider
+  #   image: otherrepo:sometag
+
+companion:
+  enable: true
+  instanceType: "companion"
+  push: 1 # probably wont work with poll unless cluster fqdn port 5665 points to companion
+  # environemnt vars to pass to the container, for example for VARS_xxxx config
+  env:
+    K8S_AUTO_DEREGISTER: "1"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "200Mi"
+    limits:
+      cpu: "300m"
+      memory: "500Mi"
+
+  additionalConfigMaps: []
+  additionalSecrets: []
+
+ingress:
+  enabled: false
+
+service:
+  type: ClusterIP
+
+serviceAccount:
+  create: true
+
+tolerations:
+  - operator: Exists
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/disk-pressure
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/memory-pressure
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/pid-pressure
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/unschedulable
+    operator: Exists
+  - effect: NoSchedule
+    key: node.kubernetes.io/network-unavailable
+    operator: Exists

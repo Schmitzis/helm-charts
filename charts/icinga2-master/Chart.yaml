@@ -1,0 +1,25 @@
+apiVersion: v2
+description: Icinga2 Master
+name: icinga2-master
+version: 0.2.0
+appVersion: 2.13.2
+keywords:
+- icinga
+- icinga2
+- master
+- web
+- monitoring
+home: https://gitlab.com/gitlab.com/olemisea/icinga2-master-chart
+# icon: https://....
+sources:
+- https://gitlab.com/gitlab.com/olemisea/icinga2-master-chart
+maintainers:
+- name: Michael Schmitz
+  email: s_michael1@gmx.de
+
+dependencies:
+- name: grafana
+  alias: grafana
+  repository: https://grafana.github.io/helm-charts
+  version: 6.13.5
+  condition: grafana.enabled

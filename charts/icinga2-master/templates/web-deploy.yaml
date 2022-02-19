@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "icinga2.resname" . }}-web
+  labels: {{ include "icinga2.labels" . | indent 4 }}
+    revision: {{ .Release.Revision | quote }}
+    component: web
+  
+spec:
+
+  strategy:
+    type: Recreate
+  replicas: 1
+
+  selector:
+    matchLabels: {{ include "icinga2.labels-selector" . | indent 6 }}
+      component: web
+
+  template:
+
+    metadata:
+      labels: {{ include "icinga2.labels" . | indent 8 }}
+        revision: {{ .Release.Revision | quote }}
+        component: web
+
+    spec:
+      # this prevents env variables for services in this namespace from being generated, as those might conflict
+      enableServiceLinks: false
+
+      {{ if .Values.icinga2.web.imagePullSecret -}}
+      imagePullSecrets:
+      - name: {{ .Values.icinga2.web.imagePullSecret }}
+      {{- end }}
+
+      terminationGracePeriodSeconds: 15
+
+      # use dnsmasq to alias external master names with local svc names
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 127.0.0.1
+        searches:
+          - {{ .Release.Namespace }}.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+        options:
+          - name: ndots
+            value: "5"
+
+      {{ if .Values.icinga2.web.initContainers }}      
+      initContainers:
+        {{ range .Values.icinga2.web.initContainers }}
+        - {{ toYaml . | indent 10 | trim }}
+        {{ end }}
+      {{ end }}
+
+      containers:
+        - name: web
+          image: {{ .Values.icinga2.web.repository }}:{{ .Values.icinga2.web.tag }}
+          imagePullPolicy: {{ .Values.icinga2.web.imagePullPolicy }}
+
+          ports:
+            - containerPort: 80
+          
+          envFrom:
+          - secretRef:
+              name: {{ template "icinga2.resname" . }}-web
+
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+          
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "500Mi"
+            limits:
+              memory: "1000Mi"
+        
+        - name: dnsmasq
+          image: "registry.gitlab.com/olemisea/dnsmasq:3.1"
+          imagePullPolicy: Always
+          command:
+            - "sh"
+            - "-c"
+            - "/entrypoint.sh"
+          ports:
+            - containerPort: 53
+          volumeMounts:
+            - name: dnsmasq-config
+              mountPath: /entrypoint.sh
+              subPath: entrypoint.sh
+
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/Europe/Berlin
+        - name: dnsmasq-config
+          configMap:
+            name: {{ template "icinga2.resname" . }}-web-dnsmasq
+            defaultMode: 0555
