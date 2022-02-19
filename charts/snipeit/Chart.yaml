@@ -1,26 +1,27 @@
 apiVersion: v2
 name: snipeit
-version: 3.3.0
-appVersion: 5.3.0
 description: A free open source IT asset/license management system
-keywords:
-- snipeit
-- inventory
-- asset management
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 3.3.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion: "5.3.0"
+
 home: https://snipeitapp.com
 icon: https://snipeitapp.com/img/logos/snipe-it-logo-xs.png
-sources:
-- https://github.com/snipe/snipe-it
-maintainers:
-- name: mschmidt291
-  email: max.schmidt@t3n.de
-
-# dependencies:
-# - name: mysql
-#   version: ^1.0.0
-#   repository: https://storage.googleapis.com/t3n-helm-charts
-#   condition: mysql.enabled
-# - name: mysql-backup
-#   version: ~1.0.1
-#   condition: mysql-backup.enabled
-#   repository: https://storage.googleapis.com/t3n-helm-charts
