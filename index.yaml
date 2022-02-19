@@ -33,4 +33,17 @@ entries:
     urls:
     - https://schmitzis.github.io/helm-charts/helm-chart-test-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-18T16:42:15.702028343Z"
+  snipeit:
+  - apiVersion: v2
+    appVersion: 5.4.0
+    created: "2022-02-19T07:29:50.602606401Z"
+    description: A free open source IT asset/license management system
+    digest: 045783dd8965bee3f010943f46b1cd48c4459539e74904fb4dcfd61be974a572
+    home: https://snipeitapp.com
+    icon: https://snipeitapp.com/img/logos/snipe-it-logo-xs.png
+    name: snipeit
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/snipeit-3.4.0/snipeit-3.4.0.tgz
+    version: 3.4.0
+generated: "2022-02-19T07:29:50.602613202Z"
