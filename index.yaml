@@ -22,6 +22,27 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/fluentbit-0.1.0/fluentbit-0.1.0.tgz
     version: 0.1.0
+  hedgedoc:
+  - apiVersion: v2
+    appVersion: 1.9.2
+    created: "2022-02-20T16:44:29.920867854Z"
+    description: A HedgeDoc Helm chart for Kubernetes
+    digest: 68c1ad33d275a525ca10de8e5b9e511613b48d2d3ccf3a07ac72ccefdf2aa920
+    icon: https://hedgedoc.org/images/banner/hedgedoc_banner_color_horizontal.svg
+    keywords:
+    - codimd
+    - markdown
+    - collaboration
+    kubeVersion: '>=1.14.0-0'
+    maintainers:
+    - email: support@hackmd.io
+      name: HackMD Inc. Dev Team
+    name: hedgedoc
+    sources:
+    - https://github.com/hedgedoc/container
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/hedgedoc-0.1.11/hedgedoc-0.1.11.tgz
+    version: 0.1.11
   helm-chart-test:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -108,4 +129,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/version-checker-0.2.2/version-checker-0.2.2.tgz
     version: 0.2.2
-generated: "2022-02-20T11:59:34.346138567Z"
+generated: "2022-02-20T16:44:29.920874456Z"
