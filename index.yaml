@@ -129,4 +129,33 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/version-checker-0.2.2/version-checker-0.2.2.tgz
     version: 0.2.2
-generated: "2022-02-20T16:44:29.920874456Z"
+  wekan:
+  - apiVersion: v2
+    appVersion: "5.65"
+    created: "2022-02-20T18:17:54.725808658Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.0.x
+    description: Open Source kanban
+    digest: 548acfcc8eb35181fc9d97ae4f18c28b22244af04de8d5389b2129ad82e8489d
+    home: https://wekan.github.io
+    icon: https://wekan.github.io/wekan-logo.svg
+    keywords:
+    - kanban
+    maintainers:
+    - email: github@randall.cc
+      name: technotaff
+    - email: jiangyt.cn@gmail.com
+      name: jiangytcn
+    - email: varac@varac.net
+      name: varac
+    name: wekan
+    sources:
+    - https://github.com/wekan/wekan
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
+    version: 1.1.0
+generated: "2022-02-20T18:17:54.725852357Z"
