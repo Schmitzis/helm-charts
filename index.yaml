@@ -95,4 +95,17 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/snipeit-3.4.0/snipeit-3.4.0.tgz
     version: 3.4.0
-generated: "2022-02-19T14:54:02.620047792Z"
+  version-checker:
+  - apiVersion: v1
+    appVersion: v0.2.1
+    created: "2022-02-20T11:59:34.346128567Z"
+    description: A Helm chart for version-checker
+    digest: 701f0f6da6da46700428d4a26a25198e5e8d99089b71624aa7a0c451027ffbc6
+    home: https://github.com/joshvanl/verison-checker
+    maintainers:
+    - name: joshvanl
+    name: version-checker
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/version-checker-0.2.2/version-checker-0.2.2.tgz
+    version: 0.2.2
+generated: "2022-02-20T11:59:34.346138567Z"
