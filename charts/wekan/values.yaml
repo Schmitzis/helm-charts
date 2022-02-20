@@ -116,9 +116,4 @@ podLabels: {}
 # ------------------------------------------------------------------------------
 
 mongodb:
-  enabled: true
-  architecture: replicaset
-  replicaCount: 3
-  replicaSetName: rs0
-  auth:
-    enabled: false
+  enabled: false
