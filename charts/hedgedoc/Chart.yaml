@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: hedgedoc
 description: A HedgeDoc Helm chart for Kubernetes
 icon: https://hedgedoc.org/images/banner/hedgedoc_banner_color_horizontal.svg
@@ -17,8 +17,8 @@ kubeVersion: ">=1.14.0-0"
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.1.10
+version: 0.1.11
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 2.3.2
+appVersion: 1.9.2
