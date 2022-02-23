@@ -35,7 +35,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- with .Values.env }}
-{{ toYaml . | indent 12 }}
+{{ toYaml . | indent 10 }}
             {{- end }}
           ports:
             - name: seahub
