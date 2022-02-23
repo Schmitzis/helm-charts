@@ -71,5 +71,9 @@ spec:
       {{- end }}
       volumes:
         - name: data
+        {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: "{{ .Values.pvcname }}"
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "seafile.fullname" . }}-data{{- end }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}

@@ -66,12 +66,16 @@ tolerations: []
 
 affinity: {}
 
-pvc:
-  create: true
-  size: 10Gi
-  storageClass: default
-  resourcePolicy: keep
-  name: false
+persistence:
+  enabled: true
+  annotations: {}
+  # storageClass: "-"
+
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
+
+  accessMode: ReadWriteOnce
+  size: 8Gi
 
 env:
   SERVER_NAME: "SEAFILE"
