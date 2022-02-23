@@ -78,15 +78,27 @@ persistence:
   size: 8Gi
 
 env:
-  SERVER_NAME: "SEAFILE"
-  SERVER_IP: "seafile.localhost"
-  SEAFILE_ADMIN_MAIL: "admin@localhost"
-  SEAFILE_ADMIN_PASS: "Temp12345"
-  DATABASE_TYPE: "mysql"
-  ENABLE_CRON_GC: "1"
-  MYSQL_HOST: "mysql-mysql-master.seafile"
-  MYSQL_PORT: "3306"
-  MYSQL_ROOT_USER: "root"
-  MYSQL_ROOT_PASSWD: ""
-  MYSQL_USER: "seafile"
-  MYSQL_USER_PASSWD: ""
+  - name: SERVER_NAME
+    value: SEAFILE
+  - name: SERVER_IP
+    value: seafile.localhost
+  - name: SEAFILE_ADMIN_MAIL
+    value: admin@localhost
+  - name: SEAFILE_ADMIN_PASS
+    value: Temp12345
+  - name: DATABASE_TYPE
+    value: mysql
+  - name: ENABLE_CRON_GC
+    value: 1
+  - name: MYSQL_HOST
+    value: mysql
+  - name: MYSQL_PORT
+    value: 3306
+  - name: MYSQL_ROOT_USER
+    value: root
+  - name: MYSQL_ROOT_PASSWD
+    value: ChangeMe123
+  - name: MYSQL_USER
+    value: seafile
+  - name: MYSQL_USER_PASSWD
+    value: ChangeMe123
