@@ -71,7 +71,6 @@ metadata:
   name: {{ $fullName }}-seafhttp
   labels:
     {{- include "seafile.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
     ingress.kubernetes.io/ssl-redirect: "true"
     ingress.kubernetes.io/rewrite-target: /
