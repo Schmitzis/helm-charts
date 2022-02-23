@@ -103,6 +103,24 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/icinga2-master-0.2.0/icinga2-master-0.2.0.tgz
     version: 0.2.0
+  seafile:
+  - apiVersion: v2
+    appVersion: 8.0.17
+    created: "2022-02-23T20:35:11.14734476Z"
+    description: Seafile Server, Reliable and Performant File Sync and Share Solution
+      on Kubernetes
+    digest: 079248f1d4002aa00df3b6b150da0840290349f019c782244076e95bb79a4541
+    icon: https://www.seafile.com/media/img/seafile-logo.png
+    keywords:
+    - cloud
+    - file
+    - share
+    - sync
+    name: seafile
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/seafile-0.0.1/seafile-0.0.1.tgz
+    version: 0.0.1
   snipeit:
   - apiVersion: v2
     appVersion: 5.4.0
@@ -158,4 +176,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-02-20T18:17:54.725852357Z"
+generated: "2022-02-23T20:35:11.147352761Z"
