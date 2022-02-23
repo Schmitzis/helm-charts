@@ -48,18 +48,18 @@ spec:
             httpGet:
               path: /accounts/login/
               port: 8000
-              initialDelaySeconds: 180
-              failureThreshold: 6
-              successThreshold: 1
-              timeoutSeconds: 15
+            initialDelaySeconds: 180
+            failureThreshold: 6
+            successThreshold: 1
+            timeoutSeconds: 15
           readinessProbe:
             httpGet:
               path: /accounts/login/
               port: 8000
-              initialDelaySeconds: 15
-              failureThreshold: 6
-              successThreshold: 1
-              timeoutSeconds: 15
+            initialDelaySeconds: 15
+            failureThreshold: 6
+            successThreshold: 1
+            timeoutSeconds: 15
           volumeMounts:
             - name: data
               mountPath: /data
