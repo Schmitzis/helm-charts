@@ -83,7 +83,7 @@ env:
   - name: SERVER_IP
     value: seafile.localhost
   - name: SEAFILE_ADMIN_MAIL
-    value: admin@localhost
+    value: 'admin@localhost'
   - name: SEAFILE_ADMIN_PASS
     value: Temp12345
   - name: DATABASE_TYPE
