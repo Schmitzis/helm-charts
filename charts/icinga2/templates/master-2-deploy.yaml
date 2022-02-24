@@ -1,10 +1,11 @@
+{{ if not .Values.icinga2.master2.disable }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "icinga2.resname" . }}-master-1
-  labels: {{ include "icinga2.labels" . | indent 4 }}
-    revision: {{ .Release.Revision | quote }}
-    component: icinga2-master-1
+  name: {{ include "icinga2.fullname" . }}-master-2
+  labels:
+    {{ include "icinga2.labels" . | indent 4 | trim }}
+    component: icinga2-master-2
 
 spec:
 
@@ -13,21 +14,22 @@ spec:
     type: Recreate
 
   selector:
-    matchLabels: {{ include "icinga2.labels-selector" . | indent 6 }}
-      component: icinga2-master-1
+    matchLabels:
+      {{- include "icinga2.selectorLabels" . | nindent 6 }}
+      component: icinga2-master-2
 
   template:
 
     metadata:
-      labels: {{ include "icinga2.labels" . | indent 8 }}
-        revision: {{ .Release.Revision | quote }}
-        component: icinga2-master-1
+      labels:
+        {{- include "icinga2.selectorLabels" . | nindent 8 }}
+        component: icinga2-master-2
 
     spec:
       # this prevents env variables for services in this namespace from being generated, as those might conflict
       enableServiceLinks: false
-      {{ if .Values.icinga2.master1.CanonicalName -}}
-      hostname: {{ .Values.icinga2.master1.CanonicalName | quote -}}
+      {{ if .Values.icinga2.master2.CanonicalName -}}
+      hostname: {{ .Values.icinga2.master2.CanonicalName | quote -}}
       {{- end }}
 
       securityContext:
@@ -47,15 +49,15 @@ spec:
                   - key: component
                     operator: In
                     values:
-                      - icinga2-master-2
+                      - icinga2-master-1
               topologyKey: "kubernetes.io/hostname"
-        {{ if .Values.icinga2.master1.nodeAffinity }}
+        {{ if .Values.icinga2.master2.nodeAffinity }}
         nodeAffinity:
-           {{ toYaml .Values.icinga2.master1.nodeAffinity | indent 10 | trim -}}
+           {{ toYaml .Values.icinga2.master2.nodeAffinity | indent 10 | trim -}}
         {{- end }}
-      {{ if .Values.icinga2.master1.nodeSelector }}
+      {{ if .Values.icinga2.master2.nodeSelector }}
       nodeSelector:
-         {{ toYaml .Values.icinga2.master1.nodeSelector | indent 10 | trim -}}
+         {{ toYaml .Values.icinga2.master2.nodeSelector | indent 10 | trim -}}
       {{- end }}
 
       initContainers:
@@ -80,7 +82,7 @@ spec:
             - name: data
               mountPath: /var/lib/icinga2/certs
               subPath: certs
-        {{ range .Values.icinga2.master1.initContainers }}
+        {{ range .Values.icinga2.master2.initContainers }}
         - {{ toYaml . | indent 10 | trim }}
         {{ end }}
 
@@ -100,7 +102,7 @@ spec:
 
           envFrom:
           - secretRef:
-              name: {{ template "icinga2.resname" . }}-master-1
+              name: {{ include "icinga2.fullname" . }}-master-1
 
           volumeMounts:
             - name: data
@@ -133,7 +135,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: {{ template "icinga2.resname" . }}-master-1
+            claimName: {{ include "icinga2.fullname" . }}-master-2
 
         - name: tz-config
           hostPath:
@@ -141,4 +143,5 @@ spec:
 
         - name: ca
           secret:
-            secretName: {{ template "icinga2.resname" . }}-ca
+            secretName: {{ include "icinga2.fullname" . }}-ca
+{{ end }}

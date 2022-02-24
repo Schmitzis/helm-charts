@@ -1,6 +1,6 @@
 apiVersion: v2
 description: Icinga2 Master
-name: icinga2-master
+name: icinga2
 version: 0.2.0
 appVersion: 2.13.2
 keywords:
@@ -10,7 +10,7 @@ keywords:
 - web
 - monitoring
 home: https://gitlab.com/gitlab.com/olemisea/icinga2-master-chart
-# icon: https://....
+icon: https://icinga.com/wp-content/uploads/2018/04/icinga-logo-icon-inverted-512.png
 sources:
 - https://gitlab.com/gitlab.com/olemisea/icinga2-master-chart
 maintainers:

@@ -1,0 +1,23 @@
+{{ if .Values.icinga2.influxdb.enable }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "icinga2.fullname" . }}-influxdb
+  labels:
+    {{ include "icinga2.labels" . | indent 4 | trim }}
+    component: influxdb
+{{- with .Values.service.annotations }}
+  annotations:
+    {{ toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  ports:
+    - name: http
+      port: 8086
+      targetPort: 8086
+      protocol: TCP
+  selector:
+    {{ include "icinga2.selectorLabels" . | nindent 4 }}
+
+{{ end }}

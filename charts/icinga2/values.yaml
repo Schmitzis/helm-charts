@@ -3,7 +3,6 @@ icinga2:
   k8sClusterDomain: svc.cluster.local
   nodeLocalDnsIp: "169.254.20.10"
   IcingaDB: false
-  IngressClass: haproxy
 
   web:
     repository: registry.gitlab.com/olemisea/icingaweb2
@@ -38,6 +37,8 @@ icinga2:
     # generate ticket salt with: openssl rand -base64 30
     ticketSalt: "ChangeMe123"
     externalPort: "5665"
+    annotations:
+      ingress.kubernetes.io/ssl-passthrough: "true"
 
   auth:
     cmdApiUser: "root"
@@ -137,6 +138,9 @@ icinga2:
       storageClass: "default"
       size: 10Gi
     initContainers: []
+
+ingress:
+  className: ""
 
 #resources:
 #  requests:
