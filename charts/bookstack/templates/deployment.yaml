@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bookstack.fullname" . }}
+  labels:
+    {{- include "bookstack.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "bookstack.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "bookstack.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "bookstack.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: APP_URL
+              value: {{ printf "%s%s" "https://" ( required "appHost is required" $.Values.bookstack.appHost ) | quote }}
+            - name: APP_VIEWS_BOOKS
+              value: grid
+            - name: SESSION_LIFETIME
+              value: "1440"
+            - name: SESSION_SECURE_COOKIE
+              value: "true"
+              {{- if $.Values.smtp.enabled }}
+            - name: MAIL_HOST
+              value: {{ required "smtp.host is required" $.Values.smtp.host | quote }}
+            - name: MAIL_PORT
+              value: {{ required "smtp.port is required" $.Values.smtp.port | quote }}
+            - name: MAIL_USERNAME
+              value: {{ required "smtp.username is required" $.Values.smtp.username | quote }}
+            - name: MAIL_PASSWORD
+              value: {{ required "smtp.password is required" $.Values.smtp.password | quote }}
+            - name: MAIL_FROM
+              value: {{ required "smtp.fromAddress is required" $.Values.smtp.fromAddress | quote }}
+            - name: MAIL_FROM_NAME
+              value: {{ required "smtp.fromName is required" $.Values.smtp.fromName | quote }}
+            - name: MAIL_ENCRYPTION
+              value: "null"
+            {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "bookstack.fullname" . }}
+          ports:
+            - name: bookstack
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.storage.mountPath }}
+              subPath: {{ .Values.persistence.storage.subPath }}
+            - name: data
+              mountPath: {{ .Values.persistence.uploads.mountPath }}
+              subPath: {{ .Values.persistence.uploads.subPath }}
+      volumes:
+        - name: data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "bookstack.fullname" . }}{{- end }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
