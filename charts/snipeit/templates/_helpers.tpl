@@ -28,8 +28,8 @@ If release name contains chart name it will be used as a full name.
 Create chart name and version as used by the chart label.
 */}}
 {{- define "snipeit.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
 {{/*
 Create a default fully qualified app name for the mysql requirement.
@@ -43,16 +43,29 @@ Create a default fully qualified app name for the mysql requirement.
 Common labels
 */}}
 {{- define "snipeit.labels" -}}
-app.kubernetes.io/name: snipeit
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 helm.sh/chart: {{ include "snipeit.chart" . }}
-{{- end -}}
+{{ include "snipeit.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
 
 {{/*
 Selector labels
 */}}
-{{- define "snipeit.selector" -}}
-app.kubernetes.io/name: snipeit
+{{- define "snipeit.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "snipeit.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "snipeit.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "snipeit.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}

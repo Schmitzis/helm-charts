@@ -35,4 +35,4 @@ spec:
       port: 80
       protocol: TCP
   selector:
-    {{ include "snipeit.selector" . | indent 4 | trim }}
+    {{ include "snipeit.selectorLabels" . | nindent 4 }}

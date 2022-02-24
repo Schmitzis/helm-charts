@@ -13,7 +13,7 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      {{ include "snipeit.selector" . | indent 6 | trim }}
+      {{- include "snipeit.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
