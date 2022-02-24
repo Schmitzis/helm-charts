@@ -18,9 +18,10 @@ spec:
     metadata:
       labels:
         {{ include "snipeit.selector" . | indent 8 | trim }}
+      {{- with .Values.deploymentAnnotations }}
       annotations:
-        backup.velero.io/backup-volumes: data
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- toYaml . | nindent 4 }}
+      {{- end }}
     spec:
       initContainers:
         - name: config-data

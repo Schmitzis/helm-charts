@@ -66,6 +66,7 @@ and their default values.
 | `config.snipeit.timezone`            | Snipe-IT Timezone                                     | `Europe/Berlin`                |
 | `config.snipeit.locale`              | Snipe-IT Locale                                       | `en`                           |
 | `config.snipeit.envConfig`           | Configure Environment Values                          | `{}`                           |
+| `deploymentAnnotations`              | Annotations for Deployment                            | `{}`                           |
 | `image.repository`                   | Image Repository                                      | `snipe/snipe-it`               |
 | `image.tag`                          | Image Tag                                             | `4.6.16`                       |
 | `image.pullPolicy`                   | Image Pull Policy                                     | `IfNotPresent`                 |
@@ -142,7 +143,7 @@ $ helm install --name my-release \
 
 ### Custom Environment Values
 
-Snipe-IT uses `.env` file to store configuration variables. This includes 
+Snipe-IT uses `.env` file to store configuration variables. This includes
 Email configuration, advanced configurations like proxy, login throttling etc.
 To override the default values for these variables, use the `config.snipeit.envConfig`.
 
