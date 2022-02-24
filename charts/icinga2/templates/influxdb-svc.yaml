@@ -7,10 +7,7 @@ metadata:
   labels:
     {{ include "icinga2.labels" . | indent 4 | trim }}
     component: influxdb
-{{- with .Values.service.annotations }}
-  annotations:
-    {{ toYaml . | nindent 4 }}
-{{- end }}
+
 spec:
   ports:
     - name: http

@@ -141,6 +141,7 @@ icinga2:
 
 ingress:
   className: ""
+  pathType: Prefix
 
 #resources:
 #  requests:

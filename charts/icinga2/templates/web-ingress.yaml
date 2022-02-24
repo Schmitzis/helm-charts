@@ -20,9 +20,9 @@ metadata:
   annotations:
     ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-{{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ .Values.ingress.className }}
-{{- end }}
+  {{- end }}
   tls:
     {{ if .Values.icinga2.web.tlsSecret -}}
     - secretName: {{ .Values.icinga2.web.tlsSecret }}
@@ -36,7 +36,7 @@ spec:
       http:
         paths:
           - path: "/"
-            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            {{- if semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion }}
             pathType: Prefix
             {{- end }}
             backend:
