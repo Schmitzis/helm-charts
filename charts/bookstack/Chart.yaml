@@ -3,7 +3,7 @@ name: bookstack
 icon: https://www.bookstackapp.com/images/favicon-32x32.png
 description: Wiki application made by Bookstack and MySQL
 type: application
-version: 0.1.0
-appVersion: 21.12.1
+version: 0.1.1
+appVersion: 21.12
 keywords:
   - wiki
