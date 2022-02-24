@@ -16,12 +16,12 @@ spec:
       {{ include "snipeit.selector" . | indent 6 | trim }}
   template:
     metadata:
-      labels:
-        {{ include "snipeit.selector" . | indent 8 | trim }}
-      {{- with .Values.deploymentAnnotations }}
+      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 4 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
+      labels:
+        {{- include "snipeit.selectorLabels" . | nindent 8 }}
     spec:
       initContainers:
         - name: config-data
