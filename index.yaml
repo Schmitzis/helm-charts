@@ -287,6 +287,18 @@ entries:
   snipeit:
   - apiVersion: v2
     appVersion: 5.4.0
+    created: "2022-02-24T11:03:56.375365289Z"
+    description: A free open source IT asset/license management system
+    digest: d5e99a255e33cc0da74210f1b4506483a9631064cd3cf78f1fee5c3ab2b1c8f2
+    home: https://snipeitapp.com
+    icon: https://snipeitapp.com/img/logos/snipe-it-logo-xs.png
+    name: snipeit
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/snipeit-3.4.1/snipeit-3.4.1.tgz
+    version: 3.4.1
+  - apiVersion: v2
+    appVersion: 5.4.0
     created: "2022-02-19T07:29:50.602606401Z"
     description: A free open source IT asset/license management system
     digest: 045783dd8965bee3f010943f46b1cd48c4459539e74904fb4dcfd61be974a572
@@ -339,4 +351,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-02-24T10:12:27.110241055Z"
+generated: "2022-02-24T11:03:56.375398811Z"
