@@ -28,9 +28,9 @@ spec:
       # this prevents env variables for services in this namespace from being generated, as those might conflict
       enableServiceLinks: false
 
-      {{ if .Values.icinga2.web.imagePullSecret -}}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-      - name: {{ .Values.icinga2.web.imagePullSecret }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 
       terminationGracePeriodSeconds: 15
@@ -58,7 +58,7 @@ spec:
       containers:
         - name: web
           image: {{ .Values.icinga2.web.repository }}:{{ .Values.icinga2.web.tag }}
-          imagePullPolicy: {{ .Values.icinga2.web.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
 
           ports:
             - containerPort: 80
@@ -80,7 +80,7 @@ spec:
 
         - name: dnsmasq
           image: "registry.gitlab.com/olemisea/dnsmasq:3.1"
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - "sh"
             - "-c"

@@ -1,7 +1,7 @@
 apiVersion: v2
 description: Icinga2 Master
 name: icinga2
-version: 0.3.1
+version: 0.4.0
 appVersion: 2.13.2
 keywords:
 - icinga

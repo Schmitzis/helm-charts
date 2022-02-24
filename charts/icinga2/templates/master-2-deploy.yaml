@@ -36,9 +36,9 @@ spec:
         runAsUser: 0
         fsGroup: 0
 
-      {{ if .Values.icinga2.master.imagePullSecret -}}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-      - name: {{ .Values.icinga2.master.imagePullSecret }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 
       affinity:
@@ -90,7 +90,7 @@ spec:
         - name: master
           image: {{ .Values.icinga2.master.repository }}:{{ .Values.icinga2.master.tag }}
           # command: ["sleep", "1000000"]
-          imagePullPolicy: {{ .Values.icinga2.master.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
             runAsUser: 0
           ports:

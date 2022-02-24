@@ -1,3 +1,8 @@
+image:
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
 icinga2:
 
   k8sClusterDomain: svc.cluster.local
@@ -8,8 +13,6 @@ icinga2:
     repository: registry.gitlab.com/olemisea/icingaweb2
     tag: "2.9.5"
     hostname: icinga2.ops.dhswt.de
-    imagePullPolicy: IfNotPresent
-    imagePullSecret: ""
     certManagerIssuer: ""
     waitForMasterUptime: 25
     tlsSecret: ""
@@ -32,8 +35,6 @@ icinga2:
   master:
     repository: registry.gitlab.com/olemisea/icinga2
     tag: "stable-2.13.2-master"
-    imagePullPolicy: IfNotPresent
-    imagePullSecret: ""
     # generate ticket salt with: openssl rand -base64 30
     ticketSalt: "ChangeMe123"
     externalPort: "5665"
@@ -80,8 +81,6 @@ icinga2:
     version: "v1"
     repository: influxdb
     tag: "1.7"
-    imagePullPolicy: IfNotPresent
-    imagePullSecret: ""
     port: "8086"
 
     adminUser: "root"
