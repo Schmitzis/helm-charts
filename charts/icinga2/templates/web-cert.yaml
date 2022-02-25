@@ -4,8 +4,6 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ include "icinga2.fullname" . }}-web
-  labels: {{ include "icinga2.labels" . | indent 4 }}
-    component: web
 
 spec:
   secretName: {{ include "icinga2.fullname" . }}-web-tls
