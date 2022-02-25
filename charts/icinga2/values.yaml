@@ -3,10 +3,15 @@ image:
 
 imagePullSecrets: []
 
+#clusterDomain: cluster.local
+nodeLocalDnsIp: "169.254.20.10"
+
+# https://developer.pagerduty.com/docs/
+PagerDuty: false
+
+# Icinga2 Applciation
 icinga2:
 
-  k8sClusterDomain: svc.cluster.local
-  nodeLocalDnsIp: "169.254.20.10"
   IcingaDB: false
 
   web:

@@ -10,13 +10,13 @@ data:
   entrypoint.sh: |-
     #/bin/sh
 
-    echo "attempting to lookup {{ include "icinga2.fullname" . }}-master-1.{{ .Release.Namespace }}.{{ .Values.icinga2.k8sClusterDomain }} @{{ .Values.icinga2.nodeLocalDnsIp }} ..."
-    MASTER_1_SVC_IP=$(dig +short "{{ include "icinga2.fullname" . }}-master-1.{{ .Release.Namespace }}.{{ .Values.icinga2.k8sClusterDomain }}" @{{ .Values.icinga2.nodeLocalDnsIp }} )
+    echo "attempting to lookup {{ include "icinga2.fullname" . }}-master-1.{{ .Release.Namespace }}.svc.{{ default "cluster.local" .Values.clusterDomain }} @{{ .Values.nodeLocalDnsIp }} ..."
+    MASTER_1_SVC_IP=$(dig +short "{{ include "icinga2.fullname" . }}-master-1.{{ .Release.Namespace }}.svc.{{ default "cluster.local" .Values.clusterDomain }}" @{{ .Values.nodeLocalDnsIp }} )
     echo "MASTER_1_SVC_IP=$MASTER_1_SVC_IP"
 
     {{ if not .Values.icinga2.master2.disable }}
-    echo "attempting to lookup {{ include "icinga2.fullname" . }}-master-2.{{ .Release.Namespace }}.{{ .Values.icinga2.k8sClusterDomain }} @{{ .Values.icinga2.nodeLocalDnsIp }} ..."
-    MASTER_2_SVC_IP=$(dig +short "{{ include "icinga2.fullname" . }}-master-2.{{ .Release.Namespace }}.{{ .Values.icinga2.k8sClusterDomain }}" @{{ .Values.icinga2.nodeLocalDnsIp }} )
+    echo "attempting to lookup {{ include "icinga2.fullname" . }}-master-2.{{ .Release.Namespace }}.svc.{{ default "cluster.local" .Values.clusterDomain }} @{{ .Values.nodeLocalDnsIp }} ..."
+    MASTER_2_SVC_IP=$(dig +short "{{ include "icinga2.fullname" . }}-master-2.{{ .Release.Namespace }}.svc.{{ default "cluster.local" .Values.clusterDomain }}" @{{ .Values.nodeLocalDnsIp }} )
     echo "MASTER_2_SVC_IP=$MASTER_2_SVC_IP"
     {{ end }}
 
@@ -28,7 +28,7 @@ data:
       {{ if not .Values.icinga2.master2.disable }}
       --address=/{{ .Values.icinga2.master2.hostname }}/$MASTER_2_SVC_IP \
       {{ end }}
-      --server={{ .Values.icinga2.nodeLocalDnsIp }} \
+      --server={{ .Values.nodeLocalDnsIp }} \
     "
 
     echo "running dnsmasq with: "
