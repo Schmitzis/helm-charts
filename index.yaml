@@ -84,6 +84,34 @@ entries:
   icinga2:
   - apiVersion: v2
     appVersion: 2.13.2
+    created: "2022-02-25T18:07:34.804896984Z"
+    dependencies:
+    - alias: grafana
+      condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 6.22.0
+    description: Icinga2 Master
+    digest: cf0a109351e7547f14da05740ec9c32f4e04649ba62ea927ee1cabec36f8aba2
+    home: https://gitlab.com/gitlab.com/olemisea/icinga2-master-chart
+    icon: https://icinga.com/wp-content/uploads/2018/04/icinga-logo-icon-inverted-512.png
+    keywords:
+    - icinga
+    - icinga2
+    - master
+    - web
+    - monitoring
+    maintainers:
+    - email: s_michael1@gmx.de
+      name: Michael Schmitz
+    name: icinga2
+    sources:
+    - https://gitlab.com/gitlab.com/olemisea/icinga2-master-chart
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/icinga2-0.5.1/icinga2-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v2
+    appVersion: 2.13.2
     created: "2022-02-25T14:50:09.46201617Z"
     dependencies:
     - alias: grafana
@@ -516,4 +544,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-02-25T14:50:09.462158499Z"
+generated: "2022-02-25T18:07:34.804946585Z"
