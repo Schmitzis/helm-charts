@@ -102,7 +102,7 @@ spec:
 
           envFrom:
           - secretRef:
-              name: {{ include "icinga2.fullname" . }}-master-1
+              name: {{ include "icinga2.fullname" . }}-master-2
 
           volumeMounts:
             - name: data
