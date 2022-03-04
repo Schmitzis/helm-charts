@@ -1,0 +1,70 @@
+redis:
+  # if you're deploying to k3s w/o a say longhorn or openebs
+  persistence:
+    storageClassName: local-path
+    enabled: true
+
+  # used target the deployment to a specific node 
+  nodeAffinity:
+    selectorMatch:
+      key: 'k3s.io/hostname'
+      values:
+      - 'k3s-worker-0.example.com'
+
+
+postgresql:
+  # if you're deploying to k3s w/o a say longhorn or openebs
+  persistence:
+    storageClassName: local-path
+    enabled: true
+
+  # used target the deployment to a specific node 
+  nodeAffinity:
+    selectorMatch:
+      key: 'k3s.io/hostname'
+      values:
+      - 'k3s-worker-0.example.com'
+
+
+gitlab:
+  # if you're deploying to k3s w/o a say longhorn or openebs
+  persistence:
+    data:
+      storageClassName: local-path
+      enabled: true
+
+  service:
+    type: ClusterIP
+    http:
+      port: 80
+    ssh: 
+      port: 2022
+
+  ingress:
+    enabled: true
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: 'true'
+    hosts:
+      - host: gitlab.example.com
+        paths:
+          -  "/"
+    tls: []
+
+  # used target the deployment to a specific node 
+  nodeAffinity:
+    selectorMatch:
+      key: 'k3s.io/hostname'
+      values:
+      - 'k3s-worker-0.example.com'
+
+  env:
+    host: 'gitlab.example.org'
+
+    signupEnabled: 'false'
+    
+    # far from secure. user `pwgen -Bsv1 64` to generate your own keys
+    secrets:
+       dbKeyBase: 'C7WRbbVbVX4czWMFfvwXTKKKx3M9wwsLjfbn3f3nJPr7pPqgkMPwW3w49kHWdqPm'
+       secretKeyBase: 'C7WRbbVbVX4czWMFfvwXTKKKx3M9wwsLjfbn3f3nJPr7pPqgkMPwW3w49kHWdqPm'
+       otpKeyBase: 'C7WRbbVbVX4czWMFfvwXTKKKx3M9wwsLjfbn3f3nJPr7pPqgkMPwW3w49kHWdqPm'
