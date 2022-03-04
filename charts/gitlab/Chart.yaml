@@ -2,7 +2,7 @@ apiVersion: v2
 name: gitlab
 description: A Helm chart for GitLab
 type: application
-version: "14.8.5"
+version: "14.8.6"
 appVersion: "14.8.2"
 icon: https://about.gitlab.com/images/press/logo/preview/gitlab-logo-white-stacked-preview.png
 description: Develop with DevOps in a single application
