@@ -49,6 +49,22 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/fluentbit-0.1.0/fluentbit-0.1.0.tgz
     version: 0.1.0
+  gitlab:
+  - apiVersion: v2
+    appVersion: 14.2.3
+    created: "2022-03-04T17:49:50.537036672Z"
+    description: Develop with DevOps in a single application
+    digest: fc98bafc73e4eef37dd5e64dd3afd525da61082bfc17d8eb74ad1bf9c760a712
+    icon: https://about.gitlab.com/images/press/logo/preview/gitlab-logo-white-stacked-preview.png
+    keywords:
+    - cloud
+    - gitlab
+    - ci
+    name: gitlab
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/gitlab-14.2.3/gitlab-14.2.3.tgz
+    version: 14.2.3
   hedgedoc:
   - apiVersion: v2
     appVersion: 1.9.2
@@ -572,4 +588,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-02-25T18:57:49.950401091Z"
+generated: "2022-03-04T17:49:50.537095462Z"
