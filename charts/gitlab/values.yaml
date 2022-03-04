@@ -6,7 +6,6 @@
 imagePullSecrets: []
 #  - name: regcred
 
-imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
@@ -25,7 +24,7 @@ gitlab:
   ##
   image:
     repository: 'sameersbn/gitlab'
-    tag: '14.2.3'
+    tag: '14.8.2'
     pullPolicy: 'IfNotPresent'
 
 
@@ -237,8 +236,8 @@ gitlab:
       wiki: 'true'
 
       ## Set if *snippets* feature should be enabled by default for new projects.
-      ## Defaults to `false`.
-      snippets: 'false'
+      ## Defaults to `true`.
+      snippets: 'true'
 
       ## Set if *builds* feature should be enabled by default for new projects.
       ## Defaults to `true`.
@@ -936,11 +935,8 @@ gitlab:
 
     redis:
 
-      ## The database server hostname. GitLab will be wired to the postgresql pod if
-      ## `{{ .Values.redis.enabled }}` is `true`.  Otherwise, GitLab will connect
-      ## to the value provided.  Defaults to not being set.
-      ##
-      host: ''
+      ## The database server hostname.
+      host: 'redis'
 
       ## The connection port of the redis server. Defaults to `6379`.
       ##
