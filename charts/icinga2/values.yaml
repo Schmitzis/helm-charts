@@ -16,7 +16,7 @@ icinga2:
 
   web:
     repository: registry.gitlab.com/olemisea/icingaweb2
-    tag: "2.9.5"
+    tag: "2.9.6"
     hostname: icinga2.ops.dhswt.de
     certManagerIssuer: ""
     waitForMasterUptime: 25
