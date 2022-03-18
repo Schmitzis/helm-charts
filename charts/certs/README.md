@@ -120,5 +120,3 @@ Your donation helps to maintain `Certs`:
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/mathnao)
 
 [acme-sh]: https://github.com/Neilpang/acme.sh
-
-# Dummy
