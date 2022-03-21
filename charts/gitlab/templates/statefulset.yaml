@@ -522,8 +522,10 @@ spec:
               {{- else }}
               value: "false"
               {{- end }}
+            {{- if .Values.gitlab.env.smtp.domain }}
             - name: SMTP_DOMAIN
               value: {{ .Values.gitlab.env.smtp.domain | quote }}
+            {{- end }}
             - name: SMTP_HOST
               value: {{ .Values.gitlab.env.smtp.host | quote }}
             - name: SMTP_PORT

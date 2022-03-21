@@ -1031,13 +1031,13 @@ gitlab:
       ##
       enabled: 'false'
 
-      ## SMTP domain. Defaults to `www.gmail.com`.
+      ## SMTP domain.
       ##
-      domain: 'www.gmail.com'
+      domain: ''
 
-      ## SMTP server host. Defaults to `smtp.gmail.com`.
+      ## SMTP server host.
       ##
-      host: 'smtp.gmail.com'
+      host: ''
 
       ## SMTP server port. Defaults to `587`.
       ##
