@@ -517,7 +517,11 @@ spec:
               value: {{ .Values.gitlab.env.db.preparedStatements | quote }}
 
             - name: SMTP_ENABLED
-              value: {{ .Values.gitlab.env.smtp.user | quote }}
+              {{- if .Values.gitlab.env.smtp.host }}
+              value: "true"
+              {{- else }}
+              value: "false"
+              {{- end }}
             - name: SMTP_DOMAIN
               value: {{ .Values.gitlab.env.smtp.domain | quote }}
             - name: SMTP_HOST
