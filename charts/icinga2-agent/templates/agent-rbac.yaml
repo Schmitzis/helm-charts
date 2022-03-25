@@ -1,0 +1,42 @@
+{{ if .Values.agent.enable -}}
+---
+{{- if .Capabilities.APIVersions.Has "rbac.authorization.k8s.io/v1" }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- else if .Capabilities.APIVersions.Has "rbac.authorization.k8s.io/v1beta1" }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+{{- end }}
+kind: ClusterRole
+metadata:
+  name: {{ template "icinga2-agent.resname" . }}-agent
+rules:
+- apiGroups: [""]
+  resources:
+  - namespaces
+  - pods
+  - services
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "icinga2-agent.resname" . }}-agent
+  namespace: {{ .Release.Namespace }}
+---
+{{- if .Capabilities.APIVersions.Has "rbac.authorization.k8s.io/v1" }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- else if .Capabilities.APIVersions.Has "rbac.authorization.k8s.io/v1beta1" }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+{{- end }}
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "icinga2-agent.resname" . }}-agent
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "icinga2-agent.resname" . }}-agent
+subjects:
+- kind: ServiceAccount
+  name: {{ template "icinga2-agent.resname" . }}-agent
+  namespace: {{ .Release.Namespace }}
+
+{{ end }}

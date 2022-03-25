@@ -1,0 +1,151 @@
+{{ if .Values.agent.enable -}}
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ template "icinga2-agent.resname" . }}
+  labels: {{ include "icinga2-agent.labels" . | indent 4 }}
+    component: agent
+
+spec:
+
+  selector:
+    matchLabels: {{ include "icinga2-agent.labels" . | indent 6 }}
+      component: agent
+
+  template:
+
+    metadata:
+      labels: {{ include "icinga2-agent.labels" . | indent 8 }}
+        component: agent
+        revision: {{ .Release.Revision | quote }}
+
+    spec:
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: {{ template "icinga2-agent.resname" . }}-agent
+
+      # priorityClassName: system-node-critical
+      tolerations:
+        {{ toYaml .Values.tolerations | indent 8 | trim }}
+
+      hostNetwork: true
+      hostPID: true
+
+      {{ if .Values.imagePullSecret -}}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecret }}
+      {{- end }}
+
+      containers:
+        - name: icinga2-agent
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          securityContext:
+            privileged: true
+
+          env:
+            - name: IC2_AGENT_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: IC2_AGENT_ENDPOINT
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          envFrom:
+            - secretRef:
+                name: {{ template "icinga2-agent.resname" . }}-agent
+
+          ports:
+            - name: icinga
+              containerPort: 5665
+            #  hostPort: 5665
+
+          volumeMounts:
+            {{ if .Values.agent.boot_partition -}}
+            - name: boot
+              mountPath: /boot
+            {{- end }}
+            {{ if .Values.agent.gluster_partition -}}
+            - name: gluster
+              mountPath: /mnt/gluster
+            {{- end }}
+            - name: cgroup
+              mountPath: /sys/fs/cgroup
+              readOnly: true
+            - name: efi
+              mountPath: /boot/efi
+            - name: proc
+              mountPath: /host/proc
+            - name: sys
+              mountPath: /host/sys
+            - name: run
+              mountPath: /host/run
+            - name: system-bus-socket
+              mountPath: /run/dbus/system_bus_socket
+            - name: fstab
+              mountPath: /etc/fstab
+              readOnly: true
+            - name: os-release
+              mountPath: /host/etc/os-release
+              readOnly: true
+            - name: dpkg-status
+              mountPath: /host/var/lib/dpkg/status
+              readOnly: true
+
+          resources:
+            {{ toYaml .Values.agent.resources | indent 12 | trim }}
+
+          livenessProbe:
+            exec:
+              command:
+              - /healthcheck.sh
+            initialDelaySeconds: 120
+            periodSeconds: 30
+
+          lifecycle:
+            preStop:
+              exec:
+                command: [/bin/bash, -c, /cont-term.sh]
+
+      volumes:
+        {{ if .Values.agent.boot_partition -}}
+        - name: boot
+          hostPath:
+            path: /boot
+        {{- end }}
+        {{ if .Values.agent.gluster_partition -}}
+        - name: gluster
+          hostPath:
+            path: /mnt/gluster
+        {{- end }}
+        - name: efi
+          hostPath:
+            path: /boot/efi
+        - name: cgroup
+          hostPath:
+            path: /sys/fs/cgroup
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: run
+          hostPath:
+            path: /run
+        - name: system-bus-socket
+          hostPath:
+            path: /run/dbus/system_bus_socket
+        - name: fstab
+          hostPath:
+            path: /etc/fstab
+        - name: os-release
+          hostPath:
+            path: /etc/os-release
+        - name: dpkg-status
+          hostPath:
+            path: /var/lib/dpkg/status
+
+{{ end }}

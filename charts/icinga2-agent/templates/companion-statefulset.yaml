@@ -1,0 +1,156 @@
+{{ if .Values.companion.enable -}}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "icinga2-agent.resname" . }}-companion
+  labels: {{ include "icinga2-agent.labels" . | indent 4 }}
+    component: companion
+
+spec:
+  replicas: 1
+  serviceName: {{ template "icinga2-agent.resname" . }}-companion
+
+  selector:
+    matchLabels: {{ include "icinga2-agent.labels" . | indent 6 }}
+      component: companion
+
+  template:
+
+    metadata:
+      labels: {{ include "icinga2-agent.labels" . | indent 8 }}
+        component: companion
+        revision: {{ .Release.Revision | quote }}
+
+    spec:
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: {{ template "icinga2-agent.resname" . }}-companion
+
+      # priorityClassName: system-node-critical
+      tolerations:
+        {{ toYaml .Values.tolerations | indent 8 | trim }}
+
+      {{ if .Values.nodeSelector }}
+      nodeSelector:
+         {{ toYaml .Values.nodeSelector | indent 10 | trim -}}
+      {{- end }}
+
+      {{ if or .Values.imagePullSecret .Values.imagePullSecrets -}}
+      imagePullSecrets:
+
+      # support legacy single pull secret
+      {{ if .Values.imagePullSecret -}}
+        - name: {{ .Values.imagePullSecret | quote }}
+      {{ end }}
+
+      # array of pull sets
+      {{ if .Values.imagePullSecrets -}}
+      {{ range $secret := .Values.imagePullSecrets }}
+        - name: {{ $secret | quote }}
+      {{ end }}
+      {{ end }}
+
+      {{ end }}
+
+      {{ if .Values.checkProviderSidecars -}}
+      initContainers:
+      {{ range $container := .Values.checkProviderSidecars }}
+        - name: {{ $container.name | quote }}
+          image: {{ $container.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          volumeMounts:
+            - name: additional-plugins
+              mountPath: /additional-plugins
+      {{ end }}
+      {{- end }}
+
+      containers:
+        - name: icinga2-companion
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+
+          envFrom:
+            - secretRef:
+                name: {{ template "icinga2-agent.resname" . }}-companion
+
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+            {{ if not .Values.companion.push }}
+            - name: IC2_AGENT_ENDPOINT
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            {{ end }}
+
+          ports:
+            - name: icinga
+              containerPort: 5665
+            #  hostPort: 5665
+
+          volumeMounts:
+            - name: additional-plugins
+              mountPath: /additional-plugins
+            {{ range $map := .Values.companion.additionalConfigMaps }}
+            - name: additional-configmaps-{{ $map.configMap.name }}
+              mountPath: {{ $map.mountPath }}
+            {{ end }}
+            {{ range $map := .Values.companion.additionalSecrets }}
+            - name: additional-secrets-{{ $map.secret.secretName }}
+              mountPath: {{ $map.mountPath }}
+            {{ end }}
+
+          resources:
+            {{ toYaml .Values.companion.resources | indent 12 | trim }}
+
+          livenessProbe:
+            exec:
+              command:
+              - /healthcheck.sh
+            initialDelaySeconds: 120
+            periodSeconds: 30
+            timeoutSeconds: 10
+
+          lifecycle:
+            preStop:
+              exec:
+                command: [/bin/bash, -c, /cont-term.sh]
+
+      volumes:
+        - name: additional-plugins
+          emptyDir: {}
+
+        {{ range $map := .Values.companion.additionalConfigMaps }}
+        - name: additional-configmaps-{{ $map.configMap.name }}
+          configMap:
+            {{ $map.configMap | toYaml | indent 12 | trim }}
+        {{ end }}
+
+        {{ range $map := .Values.companion.additionalSecrets }}
+        - name: additional-secrets-{{ $map.secret.secretName }}
+          secret:
+            {{ $map.secret | toYaml | indent 12 | trim }}
+        {{ end }}
+
+
+{{- end }}

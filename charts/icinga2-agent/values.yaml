@@ -1,10 +1,10 @@
-image:
-  repository: "registry.gitlab.com/olemisea/icinga2-agent-docker"
-  tag: "minion-0.8"
+image: "registry.gitlab.com/olemisea/icinga2-agent-docker:minion-0.8"
 imagePullPolicy: IfNotPresent
 revision: v1
 imagePullSecret: ""
 imagePullSecrets: []
+
+debug: "0" # 1 to eanble debug output, see https://icinga.com/docs/icinga-2/latest/doc/15-troubleshooting/#enable-debug-output
 
 director:
   uri: "https://icinga2.example.com/icinga/director"
@@ -16,14 +16,15 @@ master:
   ip2: "" # master2.icinga2.example.com
   port: 5665
 
+  healthcheck:
+    user: ""
+    password: ""
+
 kubernetes:
   host: "kubernetes.default"
   port: "443"
   scheme: "https"
   token: ""
-
-autoscaling:
-  enabled: false
 
 agent:
   enable: true
@@ -70,15 +71,6 @@ companion:
 
   additionalConfigMaps: []
   additionalSecrets: []
-
-ingress:
-  enabled: false
-
-service:
-  type: ClusterIP
-
-serviceAccount:
-  create: true
 
 tolerations:
   - operator: Exists

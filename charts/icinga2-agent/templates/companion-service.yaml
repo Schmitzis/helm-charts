@@ -1,0 +1,20 @@
+{{ if .Values.companion.enable -}}
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: {{ template "icinga2-agent.resname" . }}-companion
+  labels: {{ include "icinga2-agent.labels" . | indent 4 }}
+    component: companion
+
+spec:
+
+  selector: {{ include "icinga2-agent.labels-selector" . | indent 4 }}
+    component: companion
+
+  ports:
+  - port: 5665
+    targetPort: 5665
+
+{{- end }}
