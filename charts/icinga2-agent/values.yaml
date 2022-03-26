@@ -60,6 +60,7 @@ companion:
   # environemnt vars to pass to the container, for example for VARS_xxxx config
   env:
     K8S_AUTO_DEREGISTER: "1"
+    IC2_DEBUG: 0
 
   resources:
     requests:
