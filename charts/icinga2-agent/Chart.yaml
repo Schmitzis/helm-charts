@@ -1,8 +1,8 @@
 apiVersion: v2
 description: Icinga2 Agent
 name: icinga2-agent
-version: 0.8.2
-appVersion: 0.8.2
+version: 0.8.3
+appVersion: 0.8.3
 keywords:
 - icinga
 - icinga2
