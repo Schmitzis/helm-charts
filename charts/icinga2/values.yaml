@@ -6,8 +6,17 @@ imagePullSecrets: []
 #clusterDomain: cluster.local
 nodeLocalDnsIp: "169.254.20.10"
 
-# https://developer.pagerduty.com/docs/
-PagerDuty: false
+
+kickstart:
+  adminName: "" # required
+  adminEmail: "" # required
+  
+  pagerdutyApiKey: "" # optional, enables pagerduty notifications, see https://developer.pagerduty.com/docs/
+
+  matrix:
+    server: "https://matrix.org"
+    roomId: "!:matrix.org"
+    token:  ""
 
 # Icinga2 Applciation
 icinga2:
@@ -16,7 +25,7 @@ icinga2:
 
   web:
     repository: registry.gitlab.com/olemisea/icingaweb2
-    tag: "stable-2.10.0-2.bullseye"
+    tag: "2.9.6"
     hostname: icinga2.ops.dhswt.de
     certManagerIssuer: ""
     waitForMasterUptime: 25
@@ -80,6 +89,8 @@ icinga2:
     ic2UserPrefix: ""
     ic2UserPass: "ChangeMe123"
     ic2DbPrefix: "icinga2_"
+    # can use more specific permission set: "SELECT, INSERT, UPDATE, CREATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE, ALTER, REFERENCES, TRIGGER, SHOW VIEW"
+    ic2UserPermissions: "ALL PRIVILEGES"
 
   influxdb:
     enable: false
