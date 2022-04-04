@@ -1,24 +1,27 @@
-
 # Schmitzis Helm Charts
 
+[Helm](https://helm.sh/) repo for [Schmitzis](https://schmitzis.github.io) project maintained charts which can be installed on [Kubernetes](https://kubernetes.io/)
 
-## Usage
+## Repo Info
 
-[Helm](https://helm.sh) must be installed to use the charts.
-Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
+[![Releases downloads](https://img.shields.io/github/downloads/schmitzis/helm-charts/total.svg)](https://github.com/schmitzis/helm-charts/releases)
+[![Release Charts](https://github.com/Schmitzis/helm-charts/actions/workflows/release.yml/badge.svg)](https://github.com/Schmitzis/helm-charts/actions/workflows/release.yml)
 
-Once Helm is set up properly, add the repo as follows:
+## Add the Helm repo via
 
 ```console
-$ helm repo add schmitzis https://schmitzis.github.io/helm-charts/
+helm repo add schmitzis https://schmitzis.github.io/helm-charts/
 ```
 
-You can then run `helm search repo schmitzis` to see the charts.
+## Sources
 
-## Contributing
+The charts sources can be found here:
+* [https://github.com/schmitzis/helm-charts](https://github.com/schmitzis/helm-charts)
 
-TBD
+The repo source can be found here:
+* [https://github.com/schmitzis/helm-charts/tree/gh-pages](https://github.com/schmitzis/helm-charts/tree/gh-pages)
 
-## License
+Helm Releases can be found here:
+* [https://github.com/schmitzis/helm-charts/releases](https://github.com/schmitzis/helm-charts/releases)
 
-[Apache 2.0 License](./LICENSE).
+
