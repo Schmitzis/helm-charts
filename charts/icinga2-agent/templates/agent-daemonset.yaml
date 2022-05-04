@@ -141,6 +141,14 @@ spec:
               mountPath: /var/run/fail2ban/fail2ban.sock
               readOnly: true
             {{- end }}
+            {{ if .Values.agent.postfix -}}
+            - name: mailq
+              mountPath: /usr/bin/mailq
+              readOnly: true
+            - name: postfix
+              mountPath: /var/spool/postfix
+              readOnly: true
+            {{- end }}
 
           resources:
             {{ toYaml .Values.agent.resources | indent 12 | trim }}
@@ -230,6 +238,14 @@ spec:
         - name: fail2ban-sock
           hostPath:
             path: /var/run/fail2ban/fail2ban.sock
+        {{- end }}
+        {{ if .Values.agent.postfix -}}
+        - name: mailq
+          hostPath:
+            path: /usr/bin/mailq
+        - name: postfix
+          hostPath:
+            path: /var/spool/postfix
         {{- end }}
 
 {{ end }}

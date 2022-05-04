@@ -39,6 +39,7 @@ agent:
   keepalived: false
   unbound: false
   fail2ban: false
+  postfix: false
 
   resources:
     requests:
