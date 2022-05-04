@@ -38,6 +38,7 @@ agent:
   haproxy_URL: "http://172.17.0.1:1936/;csv"
   keepalived: false
   unbound: false
+  fail2ban: false
 
   resources:
     requests:

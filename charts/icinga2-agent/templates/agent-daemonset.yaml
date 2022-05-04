@@ -121,6 +121,14 @@ spec:
               mountPath: /usr/local/sbin/unbound-control
               readOnly: true
             {{- end }}
+            {{ if .Values.agent.fail2ban -}}
+            - name: fail2ban-client
+              mountPath: /usr/bin/fail2ban-client
+              readOnly: true
+            - name: fail2ban-sock
+              mountPath: /var/run/fail2ban/fail2ban.sock
+              readOnly: true
+            {{- end }}
 
           resources:
             {{ toYaml .Values.agent.resources | indent 12 | trim }}
@@ -190,6 +198,16 @@ spec:
         - name: unbound-control-bin
           hostPath:
             path: /usr/local/sbin/unbound-control
+        {{- end }}
+        {{ if .Values.agent.fail2ban -}}
+        - name: fail2ban-client
+          hostPath:
+            path: /usr/bin/fail2ban-client
+          readOnly: true
+        - name: fail2ban-sock
+          hostPath:
+            path: /var/run/fail2ban/fail2ban.sock
+          readOnly: true
         {{- end }}
 
 {{ end }}
