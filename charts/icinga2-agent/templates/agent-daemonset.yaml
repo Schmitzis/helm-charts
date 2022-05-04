@@ -129,6 +129,9 @@ spec:
               mountPath: /usr/bin/fail2ban-server
               readOnly: true
             - name: fail2ban-python
+              mountPath: /usr/lib/python3/dist-packages/fail2ban
+              readOnly: true
+            - name: fail2ban-python-bin
               mountPath: /usr/bin/fail2ban-python
               readOnly: true
             - name: fail2ban-sock
@@ -210,6 +213,9 @@ spec:
           hostPath:
             path: /usr/bin/fail2ban-client
         - name: fail2ban-python
+          hostPath:
+            path: /usr/lib/python3/dist-packages/fail2ban
+        - name: fail2ban-python-bin
           hostPath:
             path: /usr/bin/fail2ban-python
         - name: fail2ban-server
