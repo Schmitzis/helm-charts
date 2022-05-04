@@ -175,5 +175,21 @@ spec:
         - name: dpkg-status
           hostPath:
             path: /var/lib/dpkg/status
+        {{ if .Values.agent.keepalived -}}
+        - name: keepalived-pid
+          hostPath:
+            path: /run/keepalived.pid
+        - name: keepalived-status
+          hostPath:
+            path: /tmp/keepalived.status
+        {{- end }}
+        {{ if .Values.agent.unbound -}}
+        - name: unbound-etc
+          hostPath:
+            path: /etc/unbound
+        - name: unbound-control-bin
+          hostPath:
+            path: /usr/local/sbin/unbound-control
+        {{- end }}
 
 {{ end }}
