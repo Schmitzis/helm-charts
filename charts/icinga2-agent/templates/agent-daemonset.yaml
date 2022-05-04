@@ -142,17 +142,8 @@ spec:
               readOnly: true
             {{- end }}
             {{ if .Values.agent.postfix -}}
-            - name: mailq
-              mountPath: /usr/bin/mailq
-              readOnly: true
             - name: postfix
               mountPath: /var/spool/postfix
-              readOnly: true
-            - name: postfix-etc
-              mountPath: /etc/postfix/
-              readOnly: true
-            - name: postfix-usr-lib
-              mountPath: /usr/lib/postfix/
               readOnly: true
             {{- end }}
 
@@ -246,18 +237,9 @@ spec:
             path: /var/run/fail2ban/fail2ban.sock
         {{- end }}
         {{ if .Values.agent.postfix -}}
-        - name: mailq
-          hostPath:
-            path: /usr/bin/mailq
         - name: postfix
           hostPath:
             path: /var/spool/postfix
-        - name: postfix-etc
-          hostPath:
-            path: /etc/postfix/
-        - name: postfix-usr-lib
-          hostPath:
-            path: /usr/lib/postfix/
         {{- end }}
 
 {{ end }}
