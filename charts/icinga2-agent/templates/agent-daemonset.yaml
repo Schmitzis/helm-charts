@@ -148,6 +148,9 @@ spec:
             - name: postfix
               mountPath: /var/spool/postfix
               readOnly: true
+            - name: postfix-usr-lib
+              mountPath: /usr/lib/postfix/
+              readOnly: true
             {{- end }}
 
           resources:
@@ -246,6 +249,9 @@ spec:
         - name: postfix
           hostPath:
             path: /var/spool/postfix
+        - name: postfix-usr-lib
+          hostPath:
+            path: /usr/lib/postfix/
         {{- end }}
 
 {{ end }}
