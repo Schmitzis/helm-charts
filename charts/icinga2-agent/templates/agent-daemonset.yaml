@@ -32,10 +32,22 @@ spec:
       hostNetwork: true
       hostPID: true
 
-      {{ if .Values.imagePullSecret -}}
+      {{ if or .Values.imagePullSecret .Values.imagePullSecrets -}}
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecret }}
-      {{- end }}
+
+      # support legacy single pull secret
+      {{ if .Values.imagePullSecret -}}
+        - name: {{ .Values.imagePullSecret | quote }}
+      {{ end }}
+
+      # array of pull sets
+      {{ if .Values.imagePullSecrets -}}
+      {{ range $secret := .Values.imagePullSecrets }}
+        - name: {{ $secret | quote }}
+      {{ end }}
+      {{ end }}
+
+      {{ end }}
 
       containers:
         - name: icinga2-agent
