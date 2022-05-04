@@ -113,6 +113,14 @@ spec:
               mountPath: /tmp/keepalived.status
               readOnly: true
             {{- end }}
+            {{ if .Values.agent.unbound -}}
+            - name: unbound-etc
+              mountPath: /etc/unbound
+              readOnly: true
+            - name: unbound-control-bin
+              mountPath: /usr/local/sbin/unbound-control
+              readOnly: true
+            {{- end }}
 
           resources:
             {{ toYaml .Values.agent.resources | indent 12 | trim }}
