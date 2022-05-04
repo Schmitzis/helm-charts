@@ -105,7 +105,7 @@ spec:
             - name: dpkg-status
               mountPath: /host/var/lib/dpkg/status
               readOnly: true
-            {{ if .Values.agent.env.KEEPALIVED_NAME is defined -}}
+            {{ if .Values.agent.keepalived -}}
             - name: keepalived-pid
               mountPath: /run/keepalived.pid
               readOnly: true
