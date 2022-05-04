@@ -125,6 +125,9 @@ spec:
             - name: fail2ban-client
               mountPath: /usr/bin/fail2ban-client
               readOnly: true
+            - name: fail2ban-server
+              mountPath: /usr/bin/fail2ban-server
+              readOnly: true
             - name: fail2ban-sock
               mountPath: /var/run/fail2ban/fail2ban.sock
               readOnly: true
@@ -203,6 +206,9 @@ spec:
         - name: fail2ban-client
           hostPath:
             path: /usr/bin/fail2ban-client
+        - name: fail2ban-server
+          hostPath:
+            path: /usr/bin/fail2ban-server
         - name: fail2ban-sock
           hostPath:
             path: /var/run/fail2ban/fail2ban.sock
