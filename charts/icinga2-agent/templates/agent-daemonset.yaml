@@ -78,6 +78,10 @@ spec:
             {{ if .Values.agent.boot_partition -}}
             - name: boot
               mountPath: /boot
+              readOnly: true
+            - name: efi
+              mountPath: /boot/efi
+              readOnly: true
             {{- end }}
             {{ if .Values.agent.gluster_partition -}}
             - name: gluster
@@ -86,8 +90,6 @@ spec:
             - name: cgroup
               mountPath: /sys/fs/cgroup
               readOnly: true
-            - name: efi
-              mountPath: /boot/efi
             - name: proc
               mountPath: /host/proc
             - name: sys
@@ -167,15 +169,15 @@ spec:
         - name: boot
           hostPath:
             path: /boot
+        - name: efi
+          hostPath:
+            path: /boot/efi
         {{- end }}
         {{ if .Values.agent.gluster_partition -}}
         - name: gluster
           hostPath:
             path: /mnt/gluster
         {{- end }}
-        - name: efi
-          hostPath:
-            path: /boot/efi
         - name: cgroup
           hostPath:
             path: /sys/fs/cgroup
