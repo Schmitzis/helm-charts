@@ -511,6 +511,26 @@ entries:
   icinga2-agent:
   - apiVersion: v2
     appVersion: 0.8.3
+    created: "2022-05-05T13:20:32.508117666Z"
+    description: Icinga2 Agent
+    digest: 0ac56c4a6e8a1017369343f65ed7a8dcff1309e2799cdf094e6d41b2e578ca38
+    home: https://gitlab.com/gitlab.com/olemisea/icinga2-agent-docker
+    keywords:
+    - icinga
+    - icinga2
+    - agent
+    - monitoring
+    maintainers:
+    - email: s_michael1@gmx.de
+      name: Michael Schmitz
+    name: icinga2-agent
+    sources:
+    - https://gitlab.com/gitlab.com/olemisea/icinga2-agent-docker
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/icinga2-agent-0.8.26/icinga2-agent-0.8.26.tgz
+    version: 0.8.26
+  - apiVersion: v2
+    appVersion: 0.8.3
     created: "2022-05-05T11:59:36.714707881Z"
     description: Icinga2 Agent
     digest: dfe5485a69fb033778bbec8982d5a3845b5be849075d77cf06a68e70eda84e96
@@ -1282,4 +1302,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-05-05T11:59:36.714983783Z"
+generated: "2022-05-05T13:20:32.508390967Z"
