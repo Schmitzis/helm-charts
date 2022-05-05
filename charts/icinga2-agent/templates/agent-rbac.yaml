@@ -14,6 +14,7 @@ rules:
   - namespaces
   - pods
   - services
+  - volumeattachments
   verbs: ["get", "list", "watch"]
 ---
 apiVersion: v1
