@@ -111,6 +111,9 @@ spec:
             - name: os-release
               mountPath: /host/etc/os-release
               readOnly: true
+            - name: resolv
+              mountPath: /host/etc/resolv.conf
+              readOnly: true
             - name: dpkg-status
               mountPath: /host/var/lib/dpkg/status
               readOnly: true
@@ -212,6 +215,9 @@ spec:
         - name: os-release
           hostPath:
             path: /etc/os-release
+        - name: resolv
+          hostPath:
+            path: /etc/resolv.conf
         - name: dpkg-status
           hostPath:
             path: /var/lib/dpkg/status
