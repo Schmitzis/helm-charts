@@ -24,6 +24,11 @@ spec:
       enableServiceLinks: false
       terminationGracePeriodSeconds: 10
       serviceAccountName: {{ template "icinga2-agent.resname" . }}-agent
+      {{ if .Values.agent.kubelet }}
+      # needed for kubelet check
+      securityContext:
+        fsGroup: 101
+      {{ end }}
 
       # priorityClassName: system-node-critical
       tolerations:
