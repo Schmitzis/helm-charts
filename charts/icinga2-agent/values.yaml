@@ -40,6 +40,7 @@ agent:
   unbound: false
   fail2ban: false
   postfix: false
+  nodeLocalDnsIp: "" # specify to override default nameservers
 
   resources:
     requests:

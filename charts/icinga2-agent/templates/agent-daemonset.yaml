@@ -49,6 +49,13 @@ spec:
 
       {{ end }}
 
+      {{ if .Values.agent.nodeLocalDnsIp -}}
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - {{ .Values.agent.nodeLocalDnsIp }}
+      {{ end }}
+
       containers:
         - name: icinga2-agent
           image: {{ .Values.image }}
