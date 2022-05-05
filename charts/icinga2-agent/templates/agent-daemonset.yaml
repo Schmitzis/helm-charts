@@ -155,6 +155,11 @@ spec:
               mountPath: /var/spool/postfix
               readOnly: true
             {{- end }}
+            {{ if .Values.agent.kubelet }}
+            - name: kubelet-csi-pv
+              mountPath: /var/lib/kubelet/plugins/kubernetes.io/csi/pv
+              readOnly: true
+            {{- end }}
 
           resources:
             {{ toYaml .Values.agent.resources | indent 12 | trim }}
@@ -250,5 +255,9 @@ spec:
           hostPath:
             path: /var/spool/postfix
         {{- end }}
-
+        {{ if .Values.agent.kubelet }}
+        - name: kubelet-csi-pv
+          hostPath:
+            path: /var/lib/kubelet/plugins/kubernetes.io/csi/pv
+        {{- end }}
 {{ end }}

@@ -41,6 +41,7 @@ agent:
   fail2ban: false
   postfix: false
   nodeLocalDnsIp: "" # specify to override default nameservers
+  kubelet: false
 
   resources:
     requests:

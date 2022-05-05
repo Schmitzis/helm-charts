@@ -12,8 +12,12 @@ rules:
 - apiGroups: [""]
   resources:
   - namespaces
+  - persistentvolumes
   - pods
   - services
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources:
   - volumeattachments
   verbs: ["get", "list", "watch"]
 ---
