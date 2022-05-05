@@ -175,6 +175,7 @@ spec:
               - /healthcheck.sh
             initialDelaySeconds: 120
             periodSeconds: 30
+            timeoutSeconds: 10
 
           lifecycle:
             preStop:
