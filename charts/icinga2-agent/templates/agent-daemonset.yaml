@@ -49,11 +49,14 @@ spec:
 
       {{ end }}
 
+      # when not setting a dns server manually its important to set ClusterFirstWithHostNet or the pods wont be able to resolve kubernetes api or any other service running inside the cluster
       {{ if .Values.agent.nodeLocalDnsIp -}}
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
           - {{ .Values.agent.nodeLocalDnsIp }}
+      {{ else }}
+      dnsPolicy: "ClusterFirstWithHostNet"
       {{ end }}
 
       containers:
@@ -158,11 +161,9 @@ spec:
               mountPath: /var/spool/postfix
               readOnly: true
             {{- end }}
-            {{ if .Values.agent.kubelet }}
             - name: kubelet-csi-pv
               mountPath: /var/lib/kubelet/plugins/kubernetes.io/csi/pv
               readOnly: true
-            {{- end }}
 
           resources:
             {{ toYaml .Values.agent.resources | indent 12 | trim }}
@@ -262,9 +263,7 @@ spec:
           hostPath:
             path: /var/spool/postfix
         {{- end }}
-        {{ if .Values.agent.kubelet }}
         - name: kubelet-csi-pv
           hostPath:
             path: /var/lib/kubelet/plugins/kubernetes.io/csi/pv
-        {{- end }}
 {{ end }}
