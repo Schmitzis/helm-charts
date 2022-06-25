@@ -2,6 +2,8 @@ image:
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
+# example:
+# - name: "secret-name"
 
 #clusterDomain: cluster.local
 nodeLocalDnsIp: "169.254.20.10"
