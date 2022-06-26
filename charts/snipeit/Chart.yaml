@@ -2,8 +2,8 @@ apiVersion: v2
 name: snipeit
 description: A free open source IT asset/license management system
 type: application
-version: 3.4.3
-appVersion: "5.4.0"
+version: 6.0.0
+appVersion: "6.0.5"
 
 home: https://snipeitapp.com
 icon: https://snipeitapp.com/img/logos/snipe-it-logo-xs.png
