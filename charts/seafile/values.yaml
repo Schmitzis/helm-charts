@@ -4,7 +4,7 @@ image:
   repository: registry.gitlab.com/michaelstefanschmitz/seafile
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "8.0.17-pro"
+  tag: "9.0.5-pro"
 
 imagePullSecrets: []
 nameOverride: ""
