@@ -34,9 +34,6 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          # Disable S6 Timeout
-          - name: S6_CMD_WAIT_FOR_SERVICES_MAXTIME
-            value: 0
         {{- if .Values.env }}
 {{ toYaml .Values.env | indent 10 }}
         {{- end }}

@@ -102,3 +102,5 @@ env:
     value: seafile
   - name: MYSQL_USER_PASSWD
     value: ChangeMe123
+  - name: S6_CMD_WAIT_FOR_SERVICES_MAXTIME
+    value: "3660"
