@@ -75,10 +75,10 @@ spec:
               value: {{ .Values.joplin.database.port | quote }}
           ports:
             - name: http
-              containerPort: {{ .Values.joplin.app_port | quote }}
+              containerPort: {{ .Values.joplin.app_port }}
           readinessProbe:
             httpGet:
-              port: {{ .Values.joplin.app_port | quote }}
+              port: {{ .Values.joplin.app_port }}
               path: /
             initialDelaySeconds: 3
             failureThreshold: 2
@@ -89,7 +89,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /
-              port: {{ .Values.joplin.app_port | quote }}
+              port: {{ .Values.joplin.app_port }}
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 5
