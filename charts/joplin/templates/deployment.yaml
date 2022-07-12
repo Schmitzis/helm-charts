@@ -78,8 +78,12 @@ spec:
               containerPort: {{ .Values.joplin.app_port }}
           readinessProbe:
             httpGet:
+              httpHeaders:
+              - name: Host
+                value: {{ .Values.joplin.app_base_url }}
               port: {{ .Values.joplin.app_port }}
-              path: /
+              path: /api/ping
+              scheme: HTTP
             initialDelaySeconds: 3
             failureThreshold: 2
             successThreshold: 3
@@ -88,7 +92,10 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /
+              httpHeaders:
+              - name: Host
+                value: {{ .Values.joplin.app_base_url }}
+              path: /api/ping
               port: {{ .Values.joplin.app_port }}
               scheme: HTTP
             initialDelaySeconds: 3
