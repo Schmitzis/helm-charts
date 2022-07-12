@@ -12,7 +12,6 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-    {{ end }}
   selector:
     matchLabels:
       app.kubernetes.io/component: server
@@ -25,7 +24,6 @@ spec:
         app.kubernetes.io/component: server
         {{- include "joplin.labels" . | nindent 8 }}
       annotations:
-        checksum/db-secret: {{ include (print $.Template.BasePath "/db-secret.yaml") . | sha256sum | quote }}
         {{ if .Values.joplin.podAnnotations }}
         {{ toYaml .Values.joplin.podAnnotations | nindent 8 }}
         {{ end }}
