@@ -21,7 +21,7 @@ image:
 service:
   annotations: {}
   type: "ClusterIP"
-  port: 22300
+  port: 80
   # externalTrafficPolicy:
   # loadBalancerIP:
 

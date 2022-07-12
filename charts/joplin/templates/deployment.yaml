@@ -75,11 +75,11 @@ spec:
               value: {{ .Values.joplin.database.port | quote }}
           ports:
             - name: http
-              containerPort: 22300
+              containerPort: {{ .Values.joplin.app_port | quote }}
           readinessProbe:
             httpGet:
-              port: 22300
-              path: /status
+              port: {{ .Values.joplin.app_port | quote }}
+              path: /
             initialDelaySeconds: 3
             failureThreshold: 2
             successThreshold: 3
@@ -88,8 +88,8 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /status
-              port: 22300
+              path: /
+              port: {{ .Values.joplin.app_port | quote }}
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 5

@@ -22,4 +22,4 @@ spec:
     {{- include "joplin.labels" . | nindent 4 }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: 80
+      targetPort: {{ .Values.joplin.app_port | quote }}
