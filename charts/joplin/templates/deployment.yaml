@@ -52,6 +52,8 @@ spec:
         - name: joplin
           image: {{ template "joplin.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
           env:
             - name: APP_PORT
               value: {{ .Values.joplin.app_port | quote }}
