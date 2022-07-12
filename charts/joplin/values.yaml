@@ -70,11 +70,11 @@ joplin:
   ##
   ## security context
   ##
-  securityContext:
-    runAsGroup: 1500
-    runAsUser: 1500
-    fsGroup: 1500
-    runAsNonRoot: true
+  # securityContext:
+  #   runAsGroup: 1500
+  #   runAsUser: 1500
+  #   fsGroup: 1500
+  #   runAsNonRoot: true
 
   app_port: 22300
   app_base_url:
