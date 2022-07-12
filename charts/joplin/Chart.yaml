@@ -1,0 +1,24 @@
+apiVersion: v2
+name: joplin
+description: Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks
+icon: https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png
+keywords:
+  - joplin
+  - markdown
+  - collaboration
+maintainers:
+  - name: Michael Schmitz
+    email: s_michael1@gmx.de
+
+sources:
+  - https://github.com/laurent22/joplin
+
+kubeVersion: ">=1.14.0-0"
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.0.1
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application.
+appVersion: 2.8.8

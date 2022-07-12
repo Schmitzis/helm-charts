@@ -1,0 +1,100 @@
+apiVersion: {{ template "joplin.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "joplin.fullname" . }}
+  labels:
+    app.kubernetes.io/component: server
+    {{- include "joplin.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    {{ end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: server
+      app.kubernetes.io/name: {{ include "joplin.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      name: {{ template "joplin.fullname" . }}
+      labels:
+        app.kubernetes.io/component: server
+        {{- include "joplin.labels" . | nindent 8 }}
+      annotations:
+        checksum/db-secret: {{ include (print $.Template.BasePath "/db-secret.yaml") . | sha256sum | quote }}
+        {{ if .Values.joplin.podAnnotations }}
+        {{ toYaml .Values.joplin.podAnnotations | nindent 8 }}
+        {{ end }}
+    spec:
+      {{ if .Values.joplin.securityContext }}
+      securityContext:
+        {{ toYaml .Values.joplin.securityContext | nindent 8 }}
+      {{ end }}
+      {{ if .Values.joplin.affinity }}
+      affinity:
+      {{ toYaml .Values.joplin.affinity | nindent 8 }}
+      {{ end }}
+      {{ if .Values.joplin.tolerations }}
+      tolerations:
+      {{ toYaml .Values.joplin.tolerations | nindent 8 }}
+      {{ end }}
+      {{ if .Values.joplin.nodeSelector }}
+      nodeSelector:
+      {{ toYaml .Values.joplin.nodeSelector | nindent 8 }}
+      {{ end }}
+      {{ if .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{ toYaml .Values.image.pullSecrets | nindent 8 }}
+      {{end }}
+      containers:
+        - name: joplin
+          image: {{ template "joplin.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          env:
+            - name: APP_PORT
+              value: {{ .Values.joplin.app_port | quote }}
+            - name: APP_BASE_URL
+              value: {{ .Values.joplin.app_base_url | quote }}
+            - name: DB_CLIENT
+              value: {{ .Values.joplin.db_client | quote }}
+
+            - name: POSTGRES_USER
+              value: {{ .Values.joplin.database.username | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: password
+            - name: POSTGRES_DATABASE
+              value: {{ .Values.joplin.database.databaseName | quote }}
+            - name: POSTGRES_HOST
+              value: {{ .Values.joplin.database.host | quote }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.joplin.database.port | quote }}
+          ports:
+            - name: http
+              containerPort: 22300
+          readinessProbe:
+            httpGet:
+              port: 22300
+              path: /status
+            initialDelaySeconds: 3
+            failureThreshold: 2
+            successThreshold: 3
+            timeoutSeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: 22300
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+      restartPolicy: Always
