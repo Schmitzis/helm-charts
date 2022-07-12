@@ -1264,6 +1264,28 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/icinga2-master-0.2.0/icinga2-master-0.2.0.tgz
     version: 0.2.0
+  joplin:
+  - apiVersion: v2
+    appVersion: 2.8.8
+    created: "2022-07-12T14:57:54.720757396Z"
+    description: Joplin is a free, open source note taking and to-do application,
+      which can handle a large number of notes organised into notebooks
+    digest: 58236600207575e1fc56bbcae883d1b0f6952cf2203aa55ed5361b78e0952fe7
+    icon: https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png
+    keywords:
+    - joplin
+    - markdown
+    - collaboration
+    kubeVersion: '>=1.14.0-0'
+    maintainers:
+    - email: s_michael1@gmx.de
+      name: Michael Schmitz
+    name: joplin
+    sources:
+    - https://github.com/laurent22/joplin
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/joplin-0.0.1/joplin-0.0.1.tgz
+    version: 0.0.1
   seafile:
   - apiVersion: v2
     appVersion: 9.0.5
@@ -1640,4 +1662,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-07-01T10:10:22.4135937Z"
+generated: "2022-07-12T14:57:54.721143996Z"
