@@ -1267,6 +1267,27 @@ entries:
   joplin:
   - apiVersion: v2
     appVersion: 2.8.8
+    created: "2022-07-12T15:56:00.577502545Z"
+    description: Joplin is a free, open source note taking and to-do application,
+      which can handle a large number of notes organised into notebooks
+    digest: c608625f1b53b9d72eac5a10b79322fe0b1ce0cb4e3b1fe48c3cdb29e76b12de
+    icon: https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png
+    keywords:
+    - joplin
+    - markdown
+    - collaboration
+    kubeVersion: '>=1.14.0-0'
+    maintainers:
+    - email: s_michael1@gmx.de
+      name: Michael Schmitz
+    name: joplin
+    sources:
+    - https://github.com/laurent22/joplin
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/joplin-0.0.7/joplin-0.0.7.tgz
+    version: 0.0.7
+  - apiVersion: v2
+    appVersion: 2.8.8
     created: "2022-07-12T15:51:10.113380768Z"
     description: Joplin is a free, open source note taking and to-do application,
       which can handle a large number of notes organised into notebooks
@@ -1767,4 +1788,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-07-12T15:51:10.113734975Z"
+generated: "2022-07-12T15:56:00.578024345Z"
