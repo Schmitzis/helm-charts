@@ -18,8 +18,10 @@ metadata:
   labels:
     {{ include "icinga2.labels" . | indent 4 | trim }}
     component: icinga2-master-2
+  {{- with .Values.ingress.annotations }}
   annotations:
-    ingress.kubernetes.io/ssl-passthrough: "true"
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
 {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ .Values.ingress.className }}

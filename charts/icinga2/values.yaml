@@ -8,6 +8,11 @@ imagePullSecrets: []
 #clusterDomain: cluster.local
 nodeLocalDnsIp: "169.254.20.10"
 
+# Ingress
+ingress:
+  annotations:
+    ingress.kubernetes.io/ssl-passthrough: "true"
+    icinga2-k8s-check/ingress-insecure-skip-verify: "true"
 
 kickstart:
   adminName: "" # required
