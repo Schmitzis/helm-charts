@@ -164,6 +164,7 @@ spec:
             - name: kubelet-csi-pv
               mountPath: /var/lib/kubelet/plugins/kubernetes.io/csi/pv
               readOnly: true
+              mountPropagation: HostToContainer
 
           resources:
             {{ toYaml .Values.agent.resources | indent 12 | trim }}
