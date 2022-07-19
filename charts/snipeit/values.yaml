@@ -1,7 +1,7 @@
 replicaCount: 1
 revisionHistoryLimit: 0
 deploymentStrategy:
-  type: RollingUpdate
+  type: Recreate
 
 ## PodDisruptionBudget
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
