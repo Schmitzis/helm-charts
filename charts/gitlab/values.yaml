@@ -15,7 +15,7 @@ gitlab:
   ##
   image:
     repository: 'sameersbn/gitlab'
-    tag: '15.0.3'
+    tag: '15.1.2'
     pullPolicy: 'IfNotPresent'
 
 
