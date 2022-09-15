@@ -6,7 +6,9 @@ imagePullSecrets: []
 # - name: "secret-name"
 
 #clusterDomain: cluster.local
-nodeLocalDnsIp: "169.254.20.10"
+
+#set to non empty value to deploy dnsmasq sidecar
+# nodeLocalDnsIp: "169.254.20.10"
 
 kickstart:
   adminName: "" # required
@@ -26,7 +28,7 @@ icinga2:
 
   web:
     repository: registry.gitlab.com/olemisea/icingaweb2
-    tag: "2.11.0"
+    tag: "2.11.1"
     hostname: icinga2.ops.dhswt.de
     certManagerIssuer: ""
     waitForMasterUptime: 25
@@ -49,10 +51,12 @@ icinga2:
 
   master:
     repository: registry.gitlab.com/olemisea/icinga2
-    tag: "stable-2.13.4-master"
+    tag: "stable-2.13.5-master"
     # generate ticket salt with: openssl rand -base64 30
     ticketSalt: "ChangeMe123"
     externalPort: "5665"
+    # S6 Timeout in miliseconds
+    s6_timeout: "900000"
     annotations:
       ingress.kubernetes.io/ssl-passthrough: "true"
 

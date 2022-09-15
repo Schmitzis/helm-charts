@@ -1,6 +1,17 @@
 #!/bin/bash
 
-CMD="docker run -ti \
+if command -v nerdctl 1>/dev/null 2>&1; then
+    runtime="nerdctl"
+elif command -v podman 1>/dev/null 2>&1; then
+    runtime="podman"
+elif command -v docker 1>/dev/null 2>&1; then
+    runtime="docker"
+else
+    echo "No supported container runtime found"
+    exit 1
+fi
+
+CMD="${runtime} run -ti \
     -v $PWD/ca:/var/lib/icinga2/ca \
     --user root \
     --entrypoint bash \
@@ -10,8 +21,13 @@ CMD="docker run -ti \
     && /usr/sbin/icinga2 api setup --log-level debug \
     && chown -R $UID:$UID /var/lib/icinga2/ca'"
 
+
+mkdir -p ca
+
 echo $CMD
 eval $CMD
+
+sudo chown -R $USER: ca/
 
 kubectl create secret generic \
     -n icinga2 \

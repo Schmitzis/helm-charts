@@ -35,6 +35,7 @@ spec:
 
       terminationGracePeriodSeconds: 15
 
+      {{ if .Values.nodeLocalDnsIp -}}
       # use dnsmasq to alias external master names with local svc names
       dnsPolicy: "None"
       dnsConfig:
@@ -47,6 +48,7 @@ spec:
         options:
           - name: ndots
             value: "5"
+      {{ end }}
 
       {{ if .Values.icinga2.web.initContainers }}
       initContainers:
@@ -78,8 +80,9 @@ spec:
             limits:
               memory: "1000Mi"
 
+        {{ if .Values.nodeLocalDnsIp }}
         - name: dnsmasq
-          image: "registry.gitlab.com/olemisea/dnsmasq:3.1"
+          image: "registry.gitlab.com/olemisea/dnsmasq:3.16"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - "sh"
@@ -91,12 +94,15 @@ spec:
             - name: dnsmasq-config
               mountPath: /entrypoint.sh
               subPath: entrypoint.sh
+        {{ end }}
 
       volumes:
         - name: tz-config
           hostPath:
             path: /usr/share/zoneinfo/Europe/Berlin
+        {{ if .Values.nodeLocalDnsIp }}
         - name: dnsmasq-config
           configMap:
             name: {{ include "icinga2.fullname" . }}-web-dnsmasq
             defaultMode: 0555
+        {{ end }}

@@ -1,3 +1,4 @@
+{{ if .Values.nodeLocalDnsIp -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -34,3 +35,4 @@ data:
     echo "running dnsmasq with: "
     echo $DNSMASQ_CMD
     eval $DNSMASQ_CMD
+{{ end }}
