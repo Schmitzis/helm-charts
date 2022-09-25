@@ -928,6 +928,15 @@ spec:
           volumeMounts:
             - mountPath: /home/git/data
               name: gitlab-data
+            {{ range $map := .Values.additionalConfigMaps }}
+            - name: additional-configmaps-{{ $map.configMap.name }}
+              mountPath: {{ $map.mountPath }}
+            {{ end }}
+            {{ range $map := .Values.additionalSecrets }}
+            - name: additional-secrets-{{ $map.secret.secretName }}
+              mountPath: {{ $map.mountPath }}
+            {{ end }}
+          resources:
           {{- with .Values.gitlab.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
@@ -958,3 +967,14 @@ spec:
         {{- else }}
           emptyDir: {}
         {{- end }}
+        {{ range $map := .Values.additionalConfigMaps }}
+        - name: additional-configmaps-{{ $map.configMap.name }}
+          configMap:
+            {{ $map.configMap | toYaml | indent 12 | trim }}
+        {{ end }}
+
+        {{ range $map := .Values.additionalSecrets }}
+        - name: additional-secrets-{{ $map.secret.secretName }}
+          secret:
+            {{ $map.secret | toYaml | indent 12 | trim }}
+        {{ end }}

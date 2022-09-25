@@ -15,7 +15,7 @@ gitlab:
   ##
   image:
     repository: 'sameersbn/gitlab'
-    tag: '15.3.3'
+    tag: '15.4.0'
     pullPolicy: 'IfNotPresent'
 
 
@@ -1748,6 +1748,9 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+additionalConfigMaps: []
+additionalSecrets: []
 
 persistence:
   enabled: true
