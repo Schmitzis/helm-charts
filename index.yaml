@@ -61,6 +61,21 @@ entries:
     version: 0.1.0
   gitlab:
   - apiVersion: v2
+    appVersion: 15.4.0
+    created: "2022-09-25T17:03:50.974612532Z"
+    description: Develop with DevOps in a single application
+    digest: a13d989915f3e50e9d23777a347c2c9a62164b55a401a0932ffb29865e21ef6f
+    icon: https://about.gitlab.com/images/press/logo/preview/gitlab-logo-white-stacked-preview.png
+    keywords:
+    - cloud
+    - gitlab
+    - ci
+    name: gitlab
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/gitlab-15.4.0/gitlab-15.4.0.tgz
+    version: 15.4.0
+  - apiVersion: v2
     appVersion: 15.3.3
     created: "2022-09-15T20:56:29.089670235Z"
     description: Develop with DevOps in a single application
@@ -2063,4 +2078,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-09-15T21:00:13.594058348Z"
+generated: "2022-09-25T17:03:50.975715337Z"
