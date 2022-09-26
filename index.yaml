@@ -302,6 +302,26 @@ entries:
     version: 14.2.3
   hedgedoc:
   - apiVersion: v2
+    appVersion: 1.9.4
+    created: "2022-09-26T07:11:33.211519025Z"
+    description: A HedgeDoc Helm chart for Kubernetes
+    digest: fe7faccb113d72ecaeb12fbb25819233b057f544c7f4b9527afb29fca830ca38
+    icon: https://hedgedoc.org/images/banner/hedgedoc_banner_color_horizontal.svg
+    keywords:
+    - codimd
+    - markdown
+    - collaboration
+    kubeVersion: '>=1.14.0-0'
+    maintainers:
+    - email: support@hackmd.io
+      name: HackMD Inc. Dev Team
+    name: hedgedoc
+    sources:
+    - https://github.com/hedgedoc/container
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/hedgedoc-0.1.12/hedgedoc-0.1.12.tgz
+    version: 0.1.12
+  - apiVersion: v2
     appVersion: 1.9.2
     created: "2022-02-20T16:44:29.920867854Z"
     description: A HedgeDoc Helm chart for Kubernetes
@@ -2093,4 +2113,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-09-25T19:19:31.25258901Z"
+generated: "2022-09-26T07:11:33.211938528Z"
