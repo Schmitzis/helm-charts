@@ -38,7 +38,7 @@ secretEnv: {}
   #   value: ""
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 8080
   annotations: {}
     # prometheus.io/scrape: "true"
