@@ -1689,6 +1689,48 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/joplin-0.0.1/joplin-0.0.1.tgz
     version: 0.0.1
+  outline:
+  - apiVersion: v2
+    appVersion: 0.69.2
+    created: "2023-05-14T13:40:49.761858143Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.*
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 17.*
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.*
+    description: The outline helm chart to deploy outline in kubernetes clusters.
+    digest: 952f7ebf91e1f96dbccf98acf84c3aefc3bad8f45186e198bee5450a7e31f405
+    home: https://encircle360.com
+    keywords:
+    - outline
+    - wiki
+    - helm
+    - chart
+    - kubernetes
+    - s3
+    - minio
+    - postgresql
+    - mongodb
+    - knowledge
+    maintainers:
+    - email: hello@encircle360.com
+      name: encircle360 GmbH
+      url: https://encircle360.com
+    name: outline
+    sources:
+    - https://gitlab.com/encircle360-oss/helm-charts/outline
+    - https://github.com/encircle360-oss/outline-helm-chart
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/outline-0.0.8/outline-0.0.8.tgz
+    version: 0.0.8
   seafile:
   - apiVersion: v2
     appVersion: 9.0.5
@@ -2141,4 +2183,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2022-11-02T07:42:35.182265471Z"
+generated: "2023-05-14T13:40:49.762254545Z"
