@@ -22,16 +22,3 @@ sources:
 - https://gitlab.com/encircle360-oss/helm-charts/outline
 - https://github.com/encircle360-oss/outline-helm-chart
 version: 0.0.8
-dependencies:
-  - name: postgresql
-    version: 12.*
-    repository: https://charts.bitnami.com/bitnami
-    condition: postgresql.enabled
-  - name: redis
-    version: 17.*
-    repository: https://charts.bitnami.com/bitnami
-    condition: redis.enabled
-  - name: minio
-    version: 12.*
-    repository: https://charts.bitnami.com/bitnami
-    condition: minio.enabled
