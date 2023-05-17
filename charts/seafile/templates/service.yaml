@@ -8,35 +8,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: 8000
-      targetPort: 8000
-  selector:
-    {{- include "seafile.selectorLabels" . | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "seafile.fullname" . }}-seafdav
-  labels:
-    {{- include "seafile.labels" . | nindent 4 }}
-spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    {{- include "seafile.selectorLabels" . | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "seafile.fullname" . }}-seafhttp
-  labels:
-    {{- include "seafile.labels" . | nindent 4 }}
-spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: 8082
-      targetPort: 8082
+    - port: 80
+      targetPort: 80
   selector:
     {{- include "seafile.selectorLabels" . | nindent 4 }}

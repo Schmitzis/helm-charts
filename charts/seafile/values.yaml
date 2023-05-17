@@ -1,10 +1,10 @@
 replicaCount: 1
 
 image:
-  repository: registry.gitlab.com/michaelstefanschmitz/seafile
+  repository: gitea.msqu.de/devops/seafile
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "9.0.5-pro"
+  tag: "10.0.4"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -101,4 +101,6 @@ env:
   - name: MYSQL_USER
     value: seafile
   - name: MYSQL_USER_PASSWD
+    value: ChangeMe123
+  - name: SEAFILE_JWT_PRIVATE_KEY
     value: ChangeMe123
