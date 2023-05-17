@@ -38,16 +38,12 @@ spec:
 {{ toYaml .Values.env | indent 10 }}
         {{- end }}
           ports:
-            - name: seahub
-              containerPort: 8000
-            - name: seafdav
-              containerPort: 8080
-            - name: fileserver
-              containerPort: 8082
+            - name: seafile
+              containerPort: 80
           livenessProbe:
             httpGet:
               path: /accounts/login/
-              port: 8000
+              port: 80
             initialDelaySeconds: 180
             failureThreshold: 6
             successThreshold: 1
@@ -55,7 +51,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /accounts/login/
-              port: 8000
+              port: 80
             initialDelaySeconds: 15
             failureThreshold: 6
             successThreshold: 1
