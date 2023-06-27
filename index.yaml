@@ -48,6 +48,25 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/certs-1.1.9/certs-1.1.9.tgz
     version: 1.1.9
+  elasticsearch-curator:
+  - apiVersion: v2
+    appVersion: 5.8.4
+    created: "2023-06-27T17:35:59.721234324Z"
+    description: A Helm chart for Elasticsearch Curator
+    digest: f145120ad7cf716467560355720a179db4dca3b5f4223bc23755a7c1b3fbe62f
+    home: https://github.com/elastic/curator
+    icon: https://helm.elastic.co/icons/elasticsearch.png
+    keywords:
+    - curator
+    - elasticsearch
+    - elasticsearch-curator
+    name: elasticsearch-curator
+    sources:
+    - https://github.com/lebenitza/helm-elasticsearch-curator
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/elasticsearch-curator-3.2.3/elasticsearch-curator-3.2.3.tgz
+    version: 3.2.3
   fluentbit:
   - apiVersion: v2
     appVersion: 1.16.0
@@ -2234,4 +2253,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2023-05-17T13:20:14.183043403Z"
+generated: "2023-06-27T17:35:59.721496326Z"
