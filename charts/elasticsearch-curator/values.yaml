@@ -37,11 +37,6 @@ psp:
 image:
   repository: untergeek/curator
   tag: 8.0.4 # <-- Check the tags in the repo. Apparently they are major version locked.
-
-
-image:
-  repository: bitnami/elasticsearch-curator
-  tag: 5.8.4-debian-10-r253
   pullPolicy: IfNotPresent
 
 hooks:
@@ -84,22 +79,27 @@ configMaps:
     ---
     client:
       hosts:
-        - CHANGEME.host
-      port: 9200
-      # url_prefix:
-      # use_ssl: True
-      # certificate:
-      # client_cert:
-      # client_key:
-      # ssl_no_validate: True
-      # http_auth:
-      # timeout: 30
-      # master_only: False
+        - http://127.0.0.1:9200
+    #   cloud_id:
+    #   ca_certs:
+    #   client_cert:
+    #   client_key:
+    #   verify_certs:
+    #   request_timeout: 30
+    # other_settings:
+    #   master_only: False
+    #   username:
+    #   password:
+    #   api_key:
+    #     id:
+    #     api_key:
+    #     token:
+
     # logging:
     #   loglevel: INFO
     #   logfile:
     #   logformat: default
-    #   blacklist: ['elasticsearch', 'urllib3']
+    #   blacklist: ['elastic_transport', 'urllib3']
 
 
 resources: {}
