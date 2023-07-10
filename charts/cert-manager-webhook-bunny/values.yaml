@@ -13,8 +13,9 @@ certManager:
   serviceAccountName: cert-manager
 
 image:
-  repository: zmejg/cert-manager-webhook-bunny
-  pullPolicy: IfNotPresent
+  repository: ghcr.io/schmitzis/cert-manager-webhook-bunny
+  tag: latest
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
@@ -24,7 +25,7 @@ service:
   port: 443
 
 secretName:
-  - hetzner-secret
+  - bunny-credentials
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
