@@ -1,10 +1,10 @@
 replicaCount: 1
 
 image:
-  repository: gitea.msqu.de/devops/seafile
+  repository: seafileltd/seafile-mc
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "10.0.4"
+  tag: 11.0.2
 
 imagePullSecrets: []
 nameOverride: ""
@@ -78,29 +78,19 @@ persistence:
   size: 8Gi
 
 env:
-  - name: SERVER_NAME
+  - name: DB_HOST
     value: SEAFILE
-  - name: SERVER_IP
-    value: seafile.localhost
-  - name: SEAFILE_ADMIN_MAIL
+  - name: DB_ROOT_PASSWD
+    value: SEAFILE
+  - name: TIME_ZONE
+    value: Europe/Berlin
+  - name: SEAFILE_ADMIN_EMAIL
     value: 'admin@localhost'
-  - name: SEAFILE_ADMIN_PASS
+  - name: SEAFILE_ADMIN_PASSWORD
     value: Temp12345
-  - name: DATABASE_TYPE
-    value: mysql
-  - name: ENABLE_CRON_GC
-    value: 1
-  - name: MYSQL_HOST
-    value: mysql
-  - name: MYSQL_PORT
-    value: 3306
-  - name: MYSQL_ROOT_USER
-    value: root
-  - name: MYSQL_ROOT_PASSWD
-    value: ChangeMe123
-  - name: MYSQL_USER
-    value: seafile
-  - name: MYSQL_USER_PASSWD
-    value: ChangeMe123
-  - name: SEAFILE_JWT_PRIVATE_KEY
-    value: ChangeMe123
+  - name: SEAFILE_SERVER_LETSENCRYPT
+    value: 'false'
+  - name: SEAFILE_SERVER_HOSTNAME
+    value: seafile.example.com
+  - name: FORCE_HTTPS_IN_CONF
+    value: 'false'

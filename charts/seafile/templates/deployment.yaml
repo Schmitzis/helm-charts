@@ -58,7 +58,7 @@ spec:
             timeoutSeconds: 15
           volumeMounts:
             - name: data
-              mountPath: /data
+              mountPath: /shared
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
