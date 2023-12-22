@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{ template "seafile.resname" . }}
+  labels: {{ include "seafile.labels" . | indent 4 }}
+    component: seafile
+
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels: {{ include "seafile.labels-selector" . | indent 6 }}
+      component: seafile
+
+  template:
+    metadata:
+      labels: {{ include "seafile.labels" . | indent 8 }}
+        component: seafile
+        revision: {{ .Release.Revision | quote }}
+      annotations:
+        backup.velero.io/backup-volumes: data
+
+    spec:
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 60 # possibly allow some crons to finish
+      {{ if .Values.imagePullSecret }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret }}
+      {{ end }}
+      containers:
+      - image: {{ .Values.image }}
+        imagePullPolicy: Always
+        name: seafile
+        envFrom:
+        - secretRef:
+            name: {{ template "seafile.resname" . }}-config
+        ports:
+        - name: http
+          containerPort: 80
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        resources:
+          {{ toYaml .Values.resources | indent 10 | trim }}
+
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ if .Values.pvc.existingClaim }}{{ .Values.pvc.existingClaim }}{{- else }}{{ template "seafile.pvcname" . }}{{- end }}
