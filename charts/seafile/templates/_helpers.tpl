@@ -49,14 +49,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "seafile.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "seafile.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "seafile.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}

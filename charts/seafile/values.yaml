@@ -1,29 +1,31 @@
 replicaCount: 1
 
 image:
-  repository: seafileltd/seafile-mc
-  pullPolicy: IfNotPresent
+  repository: schmitzis/monorepo
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 11.0.2
+  tag: seafile-10.0.11
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+env:
+  SERVER_NAME: "SEAFILE"
+  SERVER_IP: "seafile.msqu.de"
+  SEAFILE_ADMIN_MAIL: "admin@localhost"
+  SEAFILE_ADMIN_PASS: "Temp12345"
+  DATABASE_TYPE: "mysql"
+  ENABLE_CRON_GC: "1"
+  ENABLE_CRON_CLEAN_DB: "1"
+  MYSQL_HOST: "mysql"
+  MYSQL_PORT: "3306"
+  MYSQL_ROOT_USER: "root"
+  MYSQL_ROOT_PASSWD: ""
+  MYSQL_USER: "seafile"
+  MYSQL_USER_PASSWD: ""
 
 podAnnotations: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-securityContext: {}
 
 service:
   type: ClusterIP
@@ -53,13 +55,6 @@ resources:
     memory: "2500Mi"
     cpu: "1000m"
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
 nodeSelector: {}
 
 tolerations: []
@@ -76,21 +71,3 @@ persistence:
 
   accessMode: ReadWriteOnce
   size: 8Gi
-
-env:
-  - name: DB_HOST
-    value: SEAFILE
-  - name: DB_ROOT_PASSWD
-    value: SEAFILE
-  - name: TIME_ZONE
-    value: Europe/Berlin
-  - name: SEAFILE_ADMIN_EMAIL
-    value: 'admin@localhost'
-  - name: SEAFILE_ADMIN_PASSWORD
-    value: Temp12345
-  - name: SEAFILE_SERVER_LETSENCRYPT
-    value: 'false'
-  - name: SEAFILE_SERVER_HOSTNAME
-    value: seafile.example.com
-  - name: FORCE_HTTPS_IN_CONF
-    value: 'false'

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Secret
+
+metadata:
+  name: {{ template "seafile.resname" . }}-config
+  labels: {{ include "seafile.labels" . | indent 4 }}
+    component: config
+
+type: Opaque
+
+stringData:
+  {{ range $k, $v := .Values.env }}
+  {{ if eq (printf "%T" $v) "string" }}
+  {{- $k }}: {{ $v | quote }}
+  {{ else }}
+  {{- $k }}: {{ $v | toJson | quote }}
+  {{ end }}
+  {{ end }}
