@@ -1799,6 +1799,23 @@ entries:
     version: 0.0.8
   seafile:
   - apiVersion: v2
+    appVersion: 10.0.11
+    created: "2023-12-22T09:19:28.083137448Z"
+    description: Seafile Server, Reliable and Performant File Sync and Share Solution
+      on Kubernetes
+    digest: eb943883a38c50de496dc1509a6a185ad3582f60759ab6fdda5e3498f3a2f355
+    icon: https://www.seafile.com/media/img/seafile-logo.png
+    keywords:
+    - cloud
+    - file
+    - share
+    - sync
+    name: seafile
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/seafile-1.0.1/seafile-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     appVersion: 11.0.2
     created: "2023-12-02T10:20:25.04511164Z"
     description: Seafile Server, Reliable and Performant File Sync and Share Solution
@@ -2317,4 +2334,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2023-12-02T10:20:25.045453086Z"
+generated: "2023-12-22T09:19:28.083411793Z"
