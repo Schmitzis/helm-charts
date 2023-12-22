@@ -8,12 +8,13 @@ metadata:
     component: seafile
   annotations:
     ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 1024m
 
 spec:
 
   {{/* cache value as range scope shadows global scope inside helpers */}}
   {{- $resname := include "seafile.resname" . -}}
-  
+
   tls:
 {{- range $group := .Values.ingress.groups }}
   - secretName: {{ print $group.secret }}
