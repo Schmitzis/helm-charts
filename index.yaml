@@ -1755,6 +1755,25 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/joplin-0.0.1/joplin-0.0.1.tgz
     version: 0.0.1
+  otterwiki:
+  - apiVersion: v2
+    appVersion: "2"
+    created: "2024-05-18T09:17:36.955781865Z"
+    description: An Otter Wiki is a minimalstic wiki powered by python, markdown and
+      git.
+    digest: f1483bca714ae5789c97866b069a159776b689b40c23c4bcb62526bc0c0105b5
+    home: https://otterwiki.com
+    icon: https://github.com/redimp/otterwiki/blob/c805922fe886f724eefdd118ac0c1d444d59c8aa/otterwiki/static/img/otterhead.png
+    maintainers:
+    - email: mail@redimp.de
+      name: Ralph Thesen
+    name: otterwiki
+    sources:
+    - https://github.com/redimp/otterwiki
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/otterwiki-0.1.0/otterwiki-0.1.0.tgz
+    version: 0.1.0
   outline:
   - apiVersion: v2
     appVersion: 0.69.2
@@ -2419,4 +2438,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2023-12-22T10:17:39.589388851Z"
+generated: "2024-05-18T09:17:36.956036593Z"
