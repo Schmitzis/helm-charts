@@ -1,43 +1,57 @@
-{{- if .Values.ingress.enable -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
-
 metadata:
-  name: {{ template "seafile.resname" . }}
-  labels: {{ include "seafile.labels" . | indent 4 }}
-    component: seafile
+  name: {{ include "seafile.fullname" . }}
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: 1024m
-
+    # disable max body size check
+    # https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md#custom-max-body-size
+    # http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
-
-  {{/* cache value as range scope shadows global scope inside helpers */}}
-  {{- $resname := include "seafile.resname" . -}}
-
+  {{- if .Values.ingress.tls }}
   tls:
-{{- range $group := .Values.ingress.groups }}
-  - secretName: {{ print $group.secret }}
-    hosts:
-    {{- range $key, $host := $group.domains }}
-    - {{ $host | quote }}
-    {{- end }}
-{{- end }}
-
+    - hosts:
+      - {{ .Values.ingress.tls.host | quote }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+  {{- end }}
   rules:
-{{- range $group := .Values.ingress.groups }}
-  {{- range $host := $group.domains }}
-  - host: {{ $host | quote }}
+  - host: {{ .Values.ingress.host | quote }}
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: {{ $resname }}
+            name: {{ include "seafile.fullname" . }}
             port:
               number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "seafile.fullname" . }}-webdav
+  annotations:
+    # disable max body size check
+    # https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md#custom-max-body-size
+    # http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+spec:
+  {{- if .Values.ingress.tls }}
+  tls:
+    - hosts:
+      - {{ .Values.ingress.tls.host | quote }}
+      secretName: {{ .Values.ingress.tls.secretName }}
   {{- end }}
-{{- end }}
-
-{{- end }}
+  rules:
+  - host: {{ .Values.ingress.host | quote }}
+    http:
+      paths:
+      - path: /seafdav
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "seafile.fullname" . }}
+            port:
+              number: 8080

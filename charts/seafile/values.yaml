@@ -1,49 +1,62 @@
-image: schmitzis/monorepo:seafile-10.0.11
-pullPolicy: Always
-imagePullSecret: "registry-gitea"
+---
+seafile:
+  image: seafileltd/seafile-pro-mc:13.0-latest
+  pause: false
+  persistence:
+    size: 10Gi
+    storageClassName: {}
+    existingClaim: {}
+  database:
+    hostname: mariadb
+    rootPasswordSecret:
+      name: mariadb
+      key: mariadb-root-password
+  podSecurityContext: {}
+  securityContext: {}
+  environment:
+  - name: TIME_ZONE
+    value: "Etc/UTC"
+  - name: INIT_SEAFILE_ADMIN_EMAIL
+    value: ""
+  - name: INIT_SEAFILE_ADMIN_PASSWORD
+    value: ""
+  - name: SEAFILE_SERVER_HOSTNAME
+    value: ""
+  - name: JWT_PRIVATE_KEY
+    value: "" #  pwgen -s 40 1
+  - name: SEAFILE_MYSQL_DB_USER
+    value: ""
+  - name: SEAFILE_MYSQL_DB_PASSWORD
+    value: ""
+  - name: SEAFILE_MYSQL_DB_PORT
+    value: "3306"
+  - name: SEAFILE_MYSQL_DB_CCNET_DB_NAME
+    value: ccnet_db
+  - name: SEAFILE_MYSQL_DB_SEAFILE_DB_NAME
+    value: seafile_db
+  - name: SEAFILE_MYSQL_DB_SEAHUB_DB_NAME
+    value: seahub_db
+  - name: CACHE_PROVIDER
+    value: redis
+  - name: REDIS_HOST
+    value: ""
+  - name: REDIS_PORT
+    value: "6379"
+  - name: REDIS_PASSWORD
+    value: ""
+  - name: SEAFILE_SERVER_PROTOCOL
+    value: https
 
-nameOverride: ""
-fullnameOverride: ""
-
-pvc:
-  create: true
-  size: 20Gi
-  storageClass: default
-  resourcePolicy: keep
-  name: false
-  ## If defined, PVC must be created manually before volume will be bound
-  # existingClaim:
-
-env:
-  SERVER_NAME: "SEAFILE"
-  SERVER_IP: "seafile.msqu.de"
-  SEAFILE_ADMIN_MAIL: "admin@localhost"
-  SEAFILE_ADMIN_PASS: "Temp12345"
-  DATABASE_TYPE: "mysql"
-  ENABLE_CRON_GC: "1"
-  ENABLE_CRON_CLEAN_DB: "1"
-  MYSQL_HOST: "mysql"
-  MYSQL_PORT: "3306"
-  MYSQL_ROOT_USER: "root"
-  MYSQL_ROOT_PASSWD: ""
-  MYSQL_USER: "seafile"
-  MYSQL_USER_PASSWD: ""
-
-  S6_CMD_WAIT_FOR_SERVICES: 1
-  S6_CMD_WAIT_FOR_SERVICES_MAXTIME: 120000
-
-resources:
-  requests:
-    cpu: "150m"
-    memory: "1500Mi"
-  limits:
-    memory: "2500Mi"
-    cpu: "1000m"
+nodeSelector: {}
 
 ingress:
-  enable: true
-  groups:
-  - secret: example-deploy-tls-tlda
-    domains:
-    - example-domain.tlda
-    - www.example-domain.tlda
+  annotations:
+    # use NGINX Ingress Controller
+    kubernetes.io/spec.ingressClassName: ""
+    # use Cert-Manager for LetsEncrypt Certificates
+    # cert-manager.io/issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: ""
+  host: ""
+  tls:
+    host: ""
+    secretName: {}

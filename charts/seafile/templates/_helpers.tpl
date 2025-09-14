@@ -1,36 +1,41 @@
-{{- define "seafile.resname" -}}
-{{- if $.Values.resname -}}
-{{- $.Values.resname | trunc 48 | trimSuffix "-" -}}
-{{- else -}}
-{{- $.Release.Name | trunc 48 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Expand the name of the chart.
+*/}}
 {{- define "seafile.name" -}}
-{{- default $.Chart.Name $.Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/* Create chart name and version as used by the chart label. */}}
-{{- define "seafile.chart" -}}
-{{- printf "%s-%s" $.Chart.Name $.Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{ define "seafile.labels" }}
-app: {{ template "seafile.name" $ }}
-chart: {{ template "seafile.chart" $ }}
-release: {{ $.Release.Name }}
-heritage: {{ $.Release.Service }}
-{{- end -}}
-
-{{ define "seafile.labels-selector" }}
-app: {{ template "seafile.name" $ }}
-release: {{ $.Release.Name }}
-{{- end -}}
-
-{{- define "seafile.pvcname" -}}
-{{- if .Values.pvc.name -}}
-{{- .Values.pvc.name -}}
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "seafile.fullname" -}}
+{{- $name := .Chart.Name -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- template "seafile.resname" . -}}-data
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "seafile.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "seafile.labels" -}}
+app.kubernetes.io/name: {{ include "seafile.name" . }}
+helm.sh/chart: {{ include "seafile.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
