@@ -2,8 +2,25 @@ apiVersion: v2
 name: snipeit
 description: A free open source IT asset/license management system
 type: application
-version: 6.0.4
-appVersion: "6.0.8"
+version: 6.1.0
+appVersion: "v8.3.1"
+keywords:
+- snipeit
+- inventory
+- asset management
 
 home: https://snipeitapp.com
 icon: https://snipeitapp.com/img/logos/snipe-it-logo-xs.png
+sources:
+- https://github.com/Schmitzis/helm-charts
+- https://github.com/snipe/snipe-it
+
+dependencies:
+- name: mysql
+  version: ^1.0.0
+  repository: https://storage.googleapis.com/t3n-helm-charts
+  condition: mysql.enabled
+- name: mysql-backup
+  version: ~1.0.1
+  condition: mysql-backup.enabled
+  repository: https://storage.googleapis.com/t3n-helm-charts

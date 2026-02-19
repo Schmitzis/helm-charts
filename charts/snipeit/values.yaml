@@ -1,7 +1,7 @@
 replicaCount: 1
 revisionHistoryLimit: 0
 deploymentStrategy:
-  type: Recreate
+  type: RollingUpdate
 
 ## PodDisruptionBudget
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget
@@ -9,10 +9,13 @@ deploymentStrategy:
 
 image:
   repository: snipe/snipe-it
-  tag: v6.0.8
   pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
 
-podAnnotations: {}
+extraAnnotations: {}
+  # Extra Annotations that will be added to the SnipeIT Pod(s)
+  # app.kubernetes.io/instance: snipeit
 
 service:
   type: ClusterIP
@@ -36,6 +39,16 @@ config:
     timezone: Europe/Berlin
     locale: en
     envConfig: {}
+  ## Name of the secret containing the database connection details
+  ## kubectl create secret generic my-db-secret \
+  ##   --from-literal=MYSQL_USER=<your_mysql_user> \
+  ##   --from-literal=MYSQL_DATABASE=<your_mysql_database> \
+  ##   --from-literal=MYSQL_PASSWORD=<your_mysql_password> \
+  ##   --from-literal=MYSQL_PORT_3306_TCP_ADDR=<your_mysql_host> \
+  ##   --from-literal=MYSQL_PORT_3306_TCP_PORT=<your_mysql_port> \
+  ##   --from-literal=APP_KEY=<your_app_key>
+
+  externalSecrets: ""
 
 mysql:
   ## Whether to deploy a mysql server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
@@ -80,6 +93,8 @@ persistence:
   sessions:
     mountPath: /var/www/html/storage/framework/sessions
     subPath: sessions
+  uid: 10000
+  gid: 50
 
 ingress:
   enabled: true
@@ -95,6 +110,20 @@ ingress:
   #  - secretName: example-local
   #    hosts:
   #      - example.local
+
+## MOCO MySQL Operator integration
+## When enabled, DB credentials are sourced from the MOCO-managed secret
+## instead of the built-in mysql dependency or externalDatabase config.
+## Set mysql.enabled: false when using MOCO.
+moco:
+  enabled: false
+  ## Name of the MySQLCluster resource (e.g. "mysql-snipeit")
+  ## Primary service will be derived as "moco-<clusterName>-primary"
+  clusterName: ""
+  user: moco-writable
+  database: snipeit
+  ## Key in the MOCO secret (moco-<clusterName>) that holds the password
+  passwordKey: WRITABLE_PASSWORD
 
 mysql-backup:
   enabled: false
@@ -116,3 +145,19 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+extraManifests: []
+
+extraVolumeMounts: []
+  # Additional volumeMounts to the container
+  # - name: secrets-store01-inline
+  #   mountPath: /mnt/secrets-store
+
+extraVolumes: []
+  # Additional volumes to the pod
+  # - csi:
+  #   driver: secrets-store.csi.k8s.io
+  #   readOnly: true
+  #   volumeAttributes:
+  #     secretProviderClass: "secret-csi-provider"
+  #  name : secrets-store01-inline

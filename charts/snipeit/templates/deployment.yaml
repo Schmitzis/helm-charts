@@ -13,27 +13,30 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      {{- include "snipeit.selectorLabels" . | nindent 6 }}
+      {{ include "snipeit.selectorLabels" . | indent 6 | trim }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "snipeit.selectorLabels" . | nindent 8 }}
+        {{ include "snipeit.selectorLabels" . | indent 8 | trim }}
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    {{- if .Values.extraAnnotations }}
+      {{- range $key, $value := .Values.extraAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    {{- end }}
     spec:
       initContainers:
         - name: config-data
           image: busybox
-          command: ["sh", "-c", "find {{ .Values.persistence.sessions.mountPath }} -not -user 1000 -exec chown 1000 {} \\+"]
+          command: ["sh", "-c", "find {{ .Values.persistence.sessions.mountPath }} -not -user {{ .Values.persistence.uid }} -exec chown {{ .Values.persistence.uid }}:{{ .Values.persistence.gid }} {} \\+"]
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.sessions.mountPath }}
               subPath: {{ .Values.persistence.sessions.subPath }}
       containers:
         - name: {{ include "snipeit.fullname" . }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: APP_ENV
@@ -46,9 +49,29 @@ spec:
               value: {{ .Values.config.snipeit.timezone | quote }}
             - name: APP_LOCALE
               value: {{ .Values.config.snipeit.locale | quote }}
+            {{- if .Values.moco.enabled }}
+            - name: MYSQL_USER
+              value: {{ .Values.moco.user | quote }}
+            - name: MYSQL_DATABASE
+              value: {{ .Values.moco.database | quote }}
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: moco-{{ .Values.moco.clusterName }}
+                  key: {{ .Values.moco.passwordKey }}
+            - name: MYSQL_PORT_3306_TCP_ADDR
+              value: "moco-{{ .Values.moco.clusterName }}-primary"
+            - name: MYSQL_PORT_3306_TCP_PORT
+              value: "3306"
+            {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "snipeit.fullname" . }}
+            {{ if .Values.config.externalSecrets }}
+            - secretRef:
+                name: {{ .Values.config.externalSecrets }}
+            {{ end }}
+
           ports:
             - name: http
               containerPort: 80
@@ -76,6 +99,9 @@ spec:
             - name: data
               mountPath: {{ .Values.persistence.sessions.mountPath }}
               subPath: {{ .Values.persistence.sessions.subPath }}
+            {{- if .Values.extraVolumeMounts }}
+              {{- toYaml .Values.extraVolumeMounts | nindent 12}}
+            {{- end }}
       volumes:
         - name: data
         {{- if .Values.persistence.enabled }}
@@ -83,6 +109,9 @@ spec:
             claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "snipeit.fullname" . }}{{- end }}
         {{- else }}
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+          {{- toYaml .Values.extraVolumes | nindent 8}}
         {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
