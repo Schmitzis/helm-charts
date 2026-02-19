@@ -35,6 +35,8 @@ seafile:
 
   extraResources: {}
 
+  podAnnotations: {}
+
   podSecurityContext: {}
   securityContext: {}
 

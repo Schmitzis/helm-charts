@@ -14,6 +14,10 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "seafile.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- with .Values.seafile.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       enableServiceLinks: false
       {{- with .Values.seafile.podSecurityContext }}
