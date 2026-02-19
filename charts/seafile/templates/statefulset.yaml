@@ -47,6 +47,13 @@ spec:
               secretKeyRef:
                 name: seafile-secret
                 key: JWT_PRIVATE_KEY
+          {{- if .Values.moco.clusterName }}
+          - name: SEAFILE_MYSQL_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: moco-{{ .Values.moco.clusterName }}
+                key: WRITABLE_PASSWORD
+          {{- end }}
         envFrom:
           - configMapRef:
               name: seafile-env

@@ -127,6 +127,10 @@ seafile:
     - name: INIT_SEAFILE_ADMIN_EMAIL
       initValue: true
 
+moco:
+  ## Set to the MySQLCluster name to source SEAFILE_MYSQL_DB_PASSWORD from the MOCO-generated secret
+  clusterName: ""
+
 nodeSelector: {}
 
 ingress:
