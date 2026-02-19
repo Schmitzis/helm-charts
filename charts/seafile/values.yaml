@@ -66,6 +66,9 @@ seafile:
       value: "seafile_db"
     - name: SEAFILE_MYSQL_DB_SEAHUB_DB_NAME
       value: "seahub_db"
+    - name: USE_EXISTING_DB
+      value: "0"
+      initValue: true
 
     # Cache
     - name: CACHE_PROVIDER
