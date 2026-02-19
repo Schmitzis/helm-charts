@@ -1819,6 +1819,27 @@ entries:
   seafile:
   - apiVersion: v2
     appVersion: "13.0"
+    created: "2026-02-19T11:54:18.187111961Z"
+    description: Seafile Server, Reliable and Performant File Sync and Share Solution
+      on Kubernetes
+    digest: ca021abddf055ff38ebab68335d737b019ee819ed8aa564026ff9c2809dc00bf
+    home: https://github.com/schmitzis/helm-charts
+    icon: https://www.seafile.com/media/img/seafile-logo.png
+    keywords:
+    - cloud
+    - file
+    - share
+    - sync
+    name: seafile
+    sources:
+    - https://github.com/schmitzis/helm-charts
+    - https://github.com/haiwen/seafile
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/seafile-13.0.6/seafile-13.0.6.tgz
+    version: 13.0.6
+  - apiVersion: v2
+    appVersion: "13.0"
     created: "2026-02-19T11:50:02.106450469Z"
     description: Seafile Server, Reliable and Performant File Sync and Share Solution
       on Kubernetes
@@ -2613,4 +2634,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2026-02-19T11:50:02.106844269Z"
+generated: "2026-02-19T11:54:18.187545176Z"
