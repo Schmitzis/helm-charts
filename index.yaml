@@ -2281,6 +2281,34 @@ entries:
     version: 0.0.1
   snipeit:
   - apiVersion: v2
+    appVersion: v8.3.1
+    created: "2026-02-19T10:16:44.118434891Z"
+    dependencies:
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://storage.googleapis.com/t3n-helm-charts
+      version: ^1.0.0
+    - condition: mysql-backup.enabled
+      name: mysql-backup
+      repository: https://storage.googleapis.com/t3n-helm-charts
+      version: ~1.0.1
+    description: A free open source IT asset/license management system
+    digest: af6429d1ad64412ff9dccb5712fa5fab2babf5e88a585850c13f1ce962aab2fb
+    home: https://snipeitapp.com
+    icon: https://snipeitapp.com/img/logos/snipe-it-logo-xs.png
+    keywords:
+    - snipeit
+    - inventory
+    - asset management
+    name: snipeit
+    sources:
+    - https://github.com/Schmitzis/helm-charts
+    - https://github.com/snipe/snipe-it
+    type: application
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/snipeit-6.1.0/snipeit-6.1.0.tgz
+    version: 6.1.0
+  - apiVersion: v2
     appVersion: 6.0.8
     created: "2022-07-22T09:50:42.444673204Z"
     description: A free open source IT asset/license management system
@@ -2501,4 +2529,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2025-09-14T15:12:35.088375853Z"
+generated: "2026-02-19T10:16:44.11870147Z"
