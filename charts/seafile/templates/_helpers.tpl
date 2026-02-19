@@ -39,3 +39,44 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/* Resolve container image */}}
+{{- define "seafile.image" -}}
+    {{- if .Values.seafile.configs.image -}}
+        {{- printf "%s" .Values.seafile.configs.image }}
+    {{- else -}}
+        {{- printf "seafileltd/seafile-pro-mc:%s-latest" .Chart.AppVersion }}
+    {{- end }}
+{{- end }}
+
+{{/* Whether to create/mount the seafile-data PVC */}}
+{{- define "seafile.seafileDataVolume.enabled" -}}
+    {{- $config := .Values.seafile.configs.seafileDataVolume -}}
+    {{- if or
+        (not $config)
+        (eq ($config.disablePVC | default false) false)
+    -}}
+        {{- printf "true" }}
+    {{- else -}}
+        {{- printf "false" }}
+    {{- end }}
+{{- end }}
+
+{{/* PVC storage size */}}
+{{- define "seafile.seafileDataVolume.storage" -}}
+    {{- if and (.Values.seafile.configs.seafileDataVolume) (.Values.seafile.configs.seafileDataVolume.storage) -}}
+        {{- printf "%s" .Values.seafile.configs.seafileDataVolume.storage }}
+    {{- else -}}
+        {{- printf "10Gi" }}
+    {{- end }}
+{{- end }}
+
+{{/* PVC claim name (existing or default) */}}
+{{- define "seafile.seafileDataVolume.claimName" -}}
+    {{- $config := .Values.seafile.configs.seafileDataVolume -}}
+    {{- if and $config $config.existingClaim -}}
+        {{- printf "%s" $config.existingClaim }}
+    {{- else -}}
+        {{- printf "seafile-data" }}
+    {{- end }}
+{{- end }}

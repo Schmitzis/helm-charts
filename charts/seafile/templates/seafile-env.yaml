@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seafile-env
+  labels: {{ include "seafile.labels" . | nindent 4 }}
+data:
+{{- $overrideEnv := .Values.seafile.env -}}
+{{- $initMode := .Values.seafile.initMode -}}
+
+{{- $enableNotificationServer := "false" -}}
+{{- $notificationServerURL := "" -}}
+{{- $cacheProvider := "redis" -}}
+{{- $redisHost := "" -}}
+{{- $memcachedHost := "" -}}
+{{- $seafServerStorageType := "disk" -}}
+{{- $s3CommitBucket := "" -}}
+{{- $s3FSBucket := "" -}}
+{{- $s3BlockBucket := "" -}}
+{{- $s3KeyID := "" -}}
+{{- $enableSeadoc := "false" -}}
+{{- $seadocServerURL := "" -}}
+{{- $enableSeafileAI := "false" -}}
+{{- $seafileAIServerURL := "" -}}
+
+{{- range .Values.seafile.presetEnv }}
+  {{- if eq .name "ENABLE_NOTIFICATION_SERVER" }}
+    {{- $enableNotificationServer = (index $overrideEnv .name | default .value | default "false") -}}
+  {{- else if eq .name "NOTIFICATION_SERVER_URL" }}
+    {{- $notificationServerURL = (index $overrideEnv .name | default .value | default "") -}}
+  {{- else if eq .name "CACHE_PROVIDER" }}
+    {{- $cacheProvider = (index $overrideEnv .name | default .value | default "redis") -}}
+  {{- else if eq .name "REDIS_HOST" }}
+    {{- $redisHost = (index $overrideEnv .name | default .value | default "") -}}
+  {{- else if eq .name "MEMCACHED_HOST" }}
+    {{- $memcachedHost = (index $overrideEnv .name | default .value | default "") -}}
+  {{- else if eq .name "SEAF_SERVER_STORAGE_TYPE" }}
+    {{- $seafServerStorageType = (index $overrideEnv .name | default .value | default "disk") -}}
+  {{- else if eq .name "S3_COMMIT_BUCKET" }}
+    {{- $s3CommitBucket = (index $overrideEnv .name | default .value | default "") -}}
+  {{- else if eq .name "S3_FS_BUCKET" }}
+    {{- $s3FSBucket = (index $overrideEnv .name | default .value | default "") -}}
+  {{- else if eq .name "S3_BLOCK_BUCKET" }}
+    {{- $s3BlockBucket = (index $overrideEnv .name | default .value | default "") -}}
+  {{- else if eq .name "S3_KEY_ID" }}
+    {{- $s3KeyID = (index $overrideEnv .name | default .value | default "") -}}
+  {{- else if eq .name "ENABLE_SEADOC" }}
+    {{- $enableSeadoc = (index $overrideEnv .name | default .value | default "false") -}}
+  {{- else if eq .name "SEADOC_SERVER_URL" }}
+    {{- $seadocServerURL = (index $overrideEnv .name | default .value | default "") -}}
+  {{- else if eq .name "ENABLE_SEAFILE_AI" }}
+    {{- $enableSeafileAI = (index $overrideEnv .name | default .value | default "false") -}}
+  {{- else if eq .name "SEAFILE_AI_SERVER_URL" }}
+    {{- $seafileAIServerURL = (index $overrideEnv .name | default .value | default "") -}}
+  {{- end }}
+
+  {{- $valueFromEnv := (index $overrideEnv .name | default "") -}}
+  {{- if and ($valueFromEnv) (not (eq $valueFromEnv "<required>")) }}
+  {{ .name }}: {{ $valueFromEnv | quote }}
+  {{- else if .value }}
+  {{ .name }}: {{ .value | quote }}
+  {{- else if or (.allowEmpty) (and (not $initMode) (.initValue)) }}
+  {{ .name }}: ""
+  {{- else }}
+  {{- fail (printf "%s is not specified and is not allowed to be empty" .name) -}}
+  {{- end }}
+{{- end }}
+
+{{- if eq $enableNotificationServer "true" }}
+  {{- if $notificationServerURL }}
+  INNER_NOTIFICATION_SERVER_URL: {{ $notificationServerURL | quote }}
+  {{- else }}
+    {{- fail "You have enabled notification server but NOTIFICATION_SERVER_URL is not specified" -}}
+  {{- end }}
+{{- else if or (and (eq $cacheProvider "redis") (not $redisHost)) (and (eq $cacheProvider "memcached") (not $memcachedHost)) }}
+  {{- fail (printf "You are using %s but %s_HOST is not specified!" $cacheProvider ($cacheProvider | upper)) -}}
+{{- else if and (eq $seafServerStorageType "s3") (or (not $s3BlockBucket) (not $s3CommitBucket) (not $s3FSBucket) (not $s3KeyID)) }}
+  {{- fail "You are using S3 but your S3 configuration is incomplete" -}}
+{{- else if and (eq $enableSeadoc "true") (not $seadocServerURL) }}
+  {{- fail "You have enabled Seadoc but SEADOC_SERVER_URL is not specified" -}}
+{{- else if and (eq $enableSeafileAI "true") (not $seafileAIServerURL) }}
+  {{- fail "You have enabled Seafile AI but SEAFILE_AI_SERVER_URL is not specified" -}}
+{{- end }}
