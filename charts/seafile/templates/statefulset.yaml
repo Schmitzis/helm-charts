@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "seafile.fullname" . }}
   labels: {{ include "seafile.labels" . | nindent 4 }}
 spec:
+  serviceName: {{ include "seafile.fullname" . }}
   replicas: {{ if .Values.seafile.pause }} 0 {{ else }} 1 {{ end }}
   selector:
     matchLabels:
@@ -32,7 +33,7 @@ spec:
       initContainers:
         - name: set-ownership
           image: busybox
-          command: ['sh', '-c', 'chown -R root:root /shared']
+          command: ['sh', '-c', 'mkdir -p /shared/seafile/seafile-data /shared/seafile/conf && chown -R root:root /shared']
           volumeMounts:
           - name: seafile-data
             mountPath: /shared
