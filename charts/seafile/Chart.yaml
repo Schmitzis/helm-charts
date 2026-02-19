@@ -1,7 +1,7 @@
 apiVersion: v2
 name: seafile
 type: application
-version: 13.0.4
+version: 13.0.5
 appVersion: "13.0"
 icon: https://www.seafile.com/media/img/seafile-logo.png
 home: https://github.com/schmitzis/helm-charts

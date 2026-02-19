@@ -53,11 +53,6 @@ spec:
               secretKeyRef:
                 name: moco-{{ .Values.moco.clusterName }}
                 key: WRITABLE_PASSWORD
-          - name: INIT_SEAFILE_MYSQL_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: moco-{{ .Values.moco.clusterName }}
-                key: ADMIN_PASSWORD
           {{- end }}
         envFrom:
           - configMapRef:
