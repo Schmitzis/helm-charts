@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: {{ template "seafile.resname" . }}-nginx
+  labels: {{ include "seafile.labels" . | indent 4 }}
+    component: nginx
+
+data:
+  18-wait-for-seadoc-server.sh: |
+{{ .Files.Get "files/18-wait-for-seadoc-server.sh" | indent 4 }}
+  19-wait-for-notification-server.sh: |
+{{ .Files.Get "files/19-wait-for-notification-server.sh" | indent 4 }}
+  default.conf.template: |
+{{ .Files.Get "files/nginx.conf" | indent 4 }}

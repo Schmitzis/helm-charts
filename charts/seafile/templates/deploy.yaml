@@ -1,0 +1,310 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{ template "seafile.resname" . }}
+  labels: {{ include "seafile.labels" . | indent 4 }}
+    component: seafile
+
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels: {{ include "seafile.labels-selector" . | indent 6 }}
+      component: seafile
+
+  template:
+    metadata:
+      labels: {{ include "seafile.labels" . | indent 8 }}
+        component: seafile
+        revision: {{ .Release.Revision | quote }}
+      annotations:
+        backup.velero.io/backup-volumes: data
+        checksum/nginx-config: {{ printf "%s\n%s\n%s" (.Files.Get "files/nginx.conf") (.Files.Get "files/18-wait-for-seadoc-server.sh") (.Files.Get "files/19-wait-for-notification-server.sh") | sha256sum }}
+
+    spec:
+      enableServiceLinks: false
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        - redis
+      terminationGracePeriodSeconds: 60 # possibly allow some crons to finish
+      {{ if .Values.imagePullSecret }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret }}
+      {{ end }}
+      initContainers:
+      - image: {{ .Values.image }}
+        imagePullPolicy: Always
+        name: seafile-init
+        command:
+        - /bin/bash
+        - -ec
+        - |
+          mkdir -p /run/seafile-container-environment
+          for script in /etc/my_init.d/*; do
+              echo "Running ${script}"
+              "${script}"
+          done
+        envFrom:
+        - secretRef:
+            name: {{ template "seafile.resname" . }}-config
+        env:
+        - name: SEAFILE_SKIP_CONFIG_GENERATION
+          value: "0"
+        - name: SEAFILE_INIT_CONTAINER
+          value: "true"
+        - name: ENABLE_SEADOC
+          value: {{ .Values.seadoc.enabled | quote }}
+        volumeMounts:
+        - name: data
+          mountPath: /shared
+        resources:
+          {{ toYaml .Values.resources | indent 10 | trim }}
+
+      containers:
+      - image: {{ .Values.image }}
+        imagePullPolicy: Always
+        name: seafile
+        envFrom:
+        - secretRef:
+            name: {{ template "seafile.resname" . }}-config
+        env:
+        - name: SEAFILE_SKIP_CONFIG_GENERATION
+          value: "1"
+        - name: SEAFILE_INIT_CONTAINER
+          value: "false"
+        - name: ENABLE_SEADOC
+          value: {{ .Values.seadoc.enabled | quote }}
+        - name: ENABLE_NOTIFICATION_SERVER
+          value: "true"
+        - name: NOTIFICATION_SERVER_URL
+          value: "http://127.0.0.1:8083"
+        - name: INNER_NOTIFICATION_SERVER_URL
+          value: "http://127.0.0.1:8083"
+        volumeMounts:
+        - name: data
+          mountPath: /shared
+        resources:
+          {{ toYaml .Values.resources | indent 10 | trim }}
+
+      {{- if .Values.notification.enabled }}
+      - image: {{ .Values.notification.image }}
+        imagePullPolicy: {{ .Values.notification.imagePullPolicy }}
+        name: notification-server
+        env:
+        - name: SEAFILE_MYSQL_DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_HOST
+        - name: SEAFILE_MYSQL_DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_PORT
+        - name: SEAFILE_MYSQL_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_USER
+        - name: SEAFILE_MYSQL_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_PASSWORD
+        - name: SEAFILE_MYSQL_DB_CCNET_DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_CCNET_DB_NAME
+        - name: SEAFILE_MYSQL_DB_SEAFILE_DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_SEAFILE_DB_NAME
+        - name: JWT_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: JWT_PRIVATE_KEY
+        - name: SEAFILE_LOG_TO_STDOUT
+          value: {{ .Values.notification.logToStdout | quote }}
+        - name: NOTIFICATION_SERVER_LOG_LEVEL
+          value: {{ .Values.notification.logLevel | quote }}
+        ports:
+        - name: notification
+          containerPort: 8083
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: notification
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: notification-data
+          mountPath: /shared
+        resources:
+          {{ toYaml .Values.notification.resources | indent 10 | trim }}
+      {{- end }}
+
+      {{- if .Values.seadoc.enabled }}
+      - image: {{ .Values.seadoc.image }}
+        imagePullPolicy: {{ .Values.seadoc.imagePullPolicy }}
+        name: seadoc
+        env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_PORT
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_PASSWORD
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: SEAFILE_MYSQL_DB_SEAHUB_DB_NAME
+        - name: TIME_ZONE
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: TIME_ZONE
+        - name: JWT_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: JWT_PRIVATE_KEY
+        - name: NON_ROOT
+          value: "false"
+        - name: SEAHUB_SERVICE_URL
+          value: "http://127.0.0.1:8000"
+        ports:
+        - name: seadoc
+          containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: seadoc
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: data
+          mountPath: /shared
+          subPath: sdoc-server
+        resources:
+          {{ toYaml .Values.seadoc.resources | indent 10 | trim }}
+      {{- end }}
+
+      - image: {{ .Values.nginx.image }}
+        imagePullPolicy: {{ .Values.nginx.imagePullPolicy }}
+        name: nginx
+        env:
+        - name: NGINX_ENVSUBST_FILTER
+          value: "^(SEAHUB_SERVER_HOST|SEAFILE_SERVER_HOST|WEBDAV_SERVER_HOST|NOTIFICATION_SERVER_HOST|SEADOC_SERVER_HOST)$"
+        - name: WAIT_FOR_NOTIFICATION_SERVER
+          value: {{ .Values.notification.enabled | quote }}
+        - name: NOTIFICATION_SERVER_PING_URL
+          value: "http://127.0.0.1:8083/ping"
+        - name: WAIT_FOR_SEADOC_SERVER
+          value: {{ .Values.seadoc.enabled | quote }}
+        - name: SEADOC_SERVER_PING_URL
+          value: "http://127.0.0.1/"
+        - name: SEAHUB_SERVER_HOST
+          value: "127.0.0.1"
+        - name: SEAFILE_SERVER_HOST
+          value: "127.0.0.1"
+        - name: WEBDAV_SERVER_HOST
+          value: "127.0.0.1"
+        - name: NOTIFICATION_SERVER_HOST
+          value: "127.0.0.1"
+        - name: SEADOC_SERVER_HOST
+          value: "127.0.0.1"
+        ports:
+        - name: http
+          containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/templates/default.conf.template
+          subPath: default.conf.template
+          readOnly: true
+        - name: nginx-config
+          mountPath: /docker-entrypoint.d/18-wait-for-seadoc-server.sh
+          subPath: 18-wait-for-seadoc-server.sh
+          readOnly: true
+        - name: nginx-config
+          mountPath: /docker-entrypoint.d/19-wait-for-notification-server.sh
+          subPath: 19-wait-for-notification-server.sh
+          readOnly: true
+        resources:
+          {{ toYaml .Values.nginx.resources | indent 10 | trim }}
+
+      - image: {{ .Values.redis.image }}
+        imagePullPolicy: {{ .Values.redis.imagePullPolicy }}
+        name: redis
+        command:
+        - /bin/sh
+        - -ec
+        - |
+          if [ -n "${REDIS_PASSWORD}" ]; then
+              exec redis-server --requirepass "${REDIS_PASSWORD}"
+          fi
+          exec redis-server
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "seafile.resname" . }}-config
+              key: REDIS_PASSWORD
+        ports:
+        - name: redis
+          containerPort: 6379
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -ec
+            - |
+              if [ -n "${REDIS_PASSWORD}" ]; then
+                  exec redis-cli --no-auth-warning -a "${REDIS_PASSWORD}" ping
+              fi
+              exec redis-cli ping
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        resources:
+          {{ toYaml .Values.redis.resources | indent 10 | trim }}
+
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ if .Values.pvc.existingClaim }}{{ .Values.pvc.existingClaim }}{{- else }}{{ template "seafile.pvcname" . }}{{- end }}
+      - name: nginx-config
+        configMap:
+          name: {{ template "seafile.resname" . }}-nginx
+          defaultMode: 0555
+      {{- if .Values.notification.enabled }}
+      - name: notification-data
+        emptyDir: {}
+      {{- end }}

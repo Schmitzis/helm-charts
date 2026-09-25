@@ -1,16 +1,14 @@
 apiVersion: v2
+description: Generic Seafile Deployment.
 name: seafile
-type: application
-version: 13.0.10
-appVersion: "13.0"
-icon: https://www.seafile.com/media/img/seafile-logo.png
-home: https://github.com/schmitzis/helm-charts
-description: Seafile Server, Reliable and Performant File Sync and Share Solution on Kubernetes
+version: 13.0.11
+appVersion: "13.0-latest"
 keywords:
-  - cloud
-  - file
-  - share
-  - sync
+- seafile
+home: https://github.com/schmitzis/helm-charts
+# icon: https://....
 sources:
-  - https://github.com/schmitzis/helm-charts
-  - https://github.com/haiwen/seafile
+- https://github.com/schmitzis/helm-charts
+maintainers:
+- name: Michael Schmitz
+  email: git@schmitz-quiddelbach.de

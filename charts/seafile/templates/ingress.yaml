@@ -1,57 +1,42 @@
+{{- if .Values.ingress.enable -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
+
 metadata:
-  name: {{ include "seafile.fullname" . }}
+  name: {{ template "seafile.resname" . }}
+  labels: {{ include "seafile.labels" . | indent 4 }}
+    component: seafile
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+    ingress.kubernetes.io/ssl-redirect: "true"
+
 spec:
-  {{- if .Values.ingress.className }}
-  ingressClassName: {{ .Values.ingress.className }}
-  {{- end }}
-  {{- if .Values.ingress.tls.secretName }}
+
+  {{/* cache value as range scope shadows global scope inside helpers */}}
+  {{- $resname := include "seafile.resname" . -}}
+
   tls:
-    - hosts:
-      - {{ (.Values.ingress.tls.host | default .Values.ingress.host) | quote }}
-      secretName: {{ .Values.ingress.tls.secretName }}
-  {{- end }}
+{{- range $group := .Values.ingress.groups }}
+  - secretName: {{ print $group.secret }}
+    hosts:
+    {{- range $key, $host := $group.domains }}
+    - {{ $host | quote }}
+    {{- end }}
+{{- end }}
+
   rules:
-  - host: {{ .Values.ingress.host | quote }}
+{{- range $group := .Values.ingress.groups }}
+  {{- range $host := $group.domains }}
+  - host: {{ $host | quote }}
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: {{ include "seafile.fullname" . }}
+            name: {{ $resname }}
             port:
               number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ include "seafile.fullname" . }}-webdav
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
-spec:
-  {{- if .Values.ingress.className }}
-  ingressClassName: {{ .Values.ingress.className }}
   {{- end }}
-  {{- if .Values.ingress.tls.secretName }}
-  tls:
-    - hosts:
-      - {{ (.Values.ingress.tls.host | default .Values.ingress.host) | quote }}
-      secretName: {{ .Values.ingress.tls.secretName }}
-  {{- end }}
-  rules:
-  - host: {{ .Values.ingress.host | quote }}
-    http:
-      paths:
-      - path: /seafdav
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ include "seafile.fullname" . }}
-            port:
-              number: 8080
+{{- end }}
+
+{{- end }}

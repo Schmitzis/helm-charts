@@ -1,147 +1,102 @@
----
-seafile:
-  ## Set true on first install to allow empty INIT_* vars after setup
-  initMode: true
-  ## Scale to 0 replicas without deleting the deployment
-  pause: false
+image: schmitzis/monorepo:seafile-13.0-latest
+pullPolicy: IfNotPresent
+imagePullSecret: ""
 
-  configs:
-    ## Override the container image (defaults to seafileltd/seafile-pro-mc:{appVersion}-latest)
-    # image: ""
-    seafileDataVolume:
-      storage: 10Gi
-      # storageClassName: ""
-      # disablePVC: false
-      ## Use a pre-existing PVC instead of creating one
-      # existingClaim: ""
+pvc:
+  create: true
+  size: 20Gi
+  storageClass: default
+  resourcePolicy: keep
+  name: false
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
 
-  ## Non-sensitive env var overrides (merged with presetEnv, keys = env var names)
-  env: {}
+env:
+  SERVER_NAME: "SEAFILE"
+  SERVER_IP: ""
+  SEAFILE_SERVER_PROTOCOL: "https"
+  TIME_ZONE: "Europe/Berlin"
+  JWT_PRIVATE_KEY: ""
+  SEAFILE_ADMIN_MAIL: ""
+  SEAFILE_ADMIN_PASS: ""
+  ENABLE_CRON_GC: "1"
+  ENABLE_CRON_CLEAN_DB: "1"
+  SEAFILE_MYSQL_DB_HOST: "moco-mysql-seafile-primary.seafile"
+  SEAFILE_MYSQL_DB_PORT: "3306"
+  MYSQL_ROOT_USER: "root"
+  INIT_SEAFILE_MYSQL_ROOT_PASSWORD: ""
+  SEAFILE_MYSQL_DB_USER: "seafile"
+  SEAFILE_MYSQL_DB_PASSWORD: ""
+  SEAFILE_MYSQL_DB_CCNET_DB_NAME: "seafile_ccnet"
+  SEAFILE_MYSQL_DB_SEAFILE_DB_NAME: "seafile_seafile"
+  SEAFILE_MYSQL_DB_SEAHUB_DB_NAME: "seafile_seahub"
+  CACHE_PROVIDER: "redis"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: ""
+  ENABLE_GO_FILESERVER: "true"
+  ENABLE_SEAFDAV: "true"
 
-  ## Sensitive values written to the seafile-secret Secret (keys = env var names)
-  ## e.g. SEAFILE_MYSQL_DB_PASSWORD, JWT_PRIVATE_KEY, INIT_SEAFILE_ADMIN_PASSWORD
-  secretsMap: {}
-
-  ## Extra envFrom sources (additional secretRefs / configMapRefs)
-  extraEnv: []
-
-  ## Extra volume mounts and volumes
-  extraVolumes: []
-  # - name: my-volume
-  #   mountPath: /mnt/my-volume
-  #   volumeInfo:
-  #     configMap:
-  #       name: my-configmap
-
-  extraResources: {}
-
-  podAnnotations: {}
-
-  podSecurityContext: {}
-  securityContext: {}
-
-  imagePullSecrets: []
-
-  ## Preset environment variables rendered into the seafile-env ConfigMap.
-  ## Override values via seafile.env; put secrets in seafile.secretsMap.
-  presetEnv:
-    # Seafile server
-    - name: TIME_ZONE
-      value: "UTC"
-    - name: SEAFILE_LOG_TO_STDOUT
-      value: "true"
-    - name: SITE_ROOT
-      value: "/"
-    - name: SEAFILE_SERVER_HOSTNAME
-    - name: SEAFILE_SERVER_PROTOCOL
-      value: "https"
-
-    # Database
-    - name: SEAFILE_MYSQL_DB_HOST
-    - name: SEAFILE_MYSQL_DB_PORT
-      value: "3306"
-    - name: SEAFILE_MYSQL_DB_USER
-      value: "seafile"
-    - name: SEAFILE_MYSQL_DB_CCNET_DB_NAME
-      value: "ccnet_db"
-    - name: SEAFILE_MYSQL_DB_SEAFILE_DB_NAME
-      value: "seafile_db"
-    - name: SEAFILE_MYSQL_DB_SEAHUB_DB_NAME
-      value: "seahub_db"
-    - name: USE_EXISTING_DB
-      value: "0"
-      initValue: true
-
-    # Cache
-    - name: CACHE_PROVIDER
-      value: "redis"
-    - name: REDIS_HOST
-      allowEmpty: true
-    - name: REDIS_PORT
-      value: "6379"
-    - name: MEMCACHED_HOST
-      allowEmpty: true
-    - name: MEMCACHED_PORT
-      value: "11211"
-
-    # S3
-    - name: SEAF_SERVER_STORAGE_TYPE
-      allowEmpty: true
-    - name: S3_COMMIT_BUCKET
-      allowEmpty: true
-    - name: S3_FS_BUCKET
-      allowEmpty: true
-    - name: S3_BLOCK_BUCKET
-      allowEmpty: true
-    - name: S3_KEY_ID
-      allowEmpty: true
-    - name: S3_USE_V4_SIGNATURE
-      value: "true"
-    - name: S3_AWS_REGION
-      value: "us-east-1"
-    - name: S3_HOST
-      allowEmpty: true
-    - name: S3_USE_HTTPS
-      value: "true"
-    - name: S3_PATH_STYLE_REQUEST
-      value: "false"
-
-    # Notification server
-    - name: ENABLE_NOTIFICATION_SERVER
-      value: "false"
-    - name: NOTIFICATION_SERVER_URL
-      allowEmpty: true
-
-    # Seafile AI
-    - name: ENABLE_SEAFILE_AI
-      value: "false"
-    - name: SEAFILE_AI_SERVER_URL
-      allowEmpty: true
-
-    # Metadata
-    - name: MD_FILE_COUNT_LIMIT
-      value: "100000"
-
-    # SeaDoc
-    - name: ENABLE_SEADOC
-      value: "false"
-    - name: SEADOC_SERVER_URL
-      allowEmpty: true
-
-    # Initialization (only required when initMode: true)
-    - name: INIT_SEAFILE_ADMIN_EMAIL
-      initValue: true
-
-moco:
-  ## Set to the MySQLCluster name to source SEAFILE_MYSQL_DB_PASSWORD from the MOCO-generated secret
-  clusterName: ""
-
-nodeSelector: {}
+resources:
+  requests:
+    cpu: "150m"
+    memory: "1500Mi"
+  limits:
+    memory: "2500Mi"
+    cpu: "1000m"
 
 ingress:
-  className: ""
-  annotations: {}
-  host: ""
-  tls:
-    host: ""
-    secretName: ""
+  enable: true
+  groups:
+  - secret: example-deploy-tls-tlda
+    domains:
+    - example-domain.tlda
+    - www.example-domain.tlda
+
+notification:
+  enabled: true
+  image: seafileltd/notification-server:13.0.21
+  imagePullPolicy: IfNotPresent
+  logToStdout: "true"
+  logLevel: info
+  resources:
+    requests:
+      cpu: "25m"
+      memory: "64Mi"
+    limits:
+      cpu: "250m"
+      memory: "256Mi"
+
+seadoc:
+  enabled: false
+  image: seafileltd/sdoc-server:2.0.9
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
+
+redis:
+  image: redis:8.10.2
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "25m"
+      memory: "64Mi"
+    limits:
+      cpu: "100m"
+      memory: "256Mi"
+
+nginx:
+  image: nginx:mainline
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "25m"
+      memory: "32Mi"
+    limits:
+      cpu: "250m"
+      memory: "128Mi"
