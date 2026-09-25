@@ -1818,6 +1818,23 @@ entries:
     version: 0.0.8
   seafile:
   - apiVersion: v2
+    appVersion: 13.0-latest
+    created: "2026-09-25T07:20:35.367776109Z"
+    description: Generic Seafile Deployment.
+    digest: c2b33a96bfe7aa41c24f9375447497563145bf71bfa48499416d0731fd2b125e
+    home: https://github.com/schmitzis/helm-charts
+    keywords:
+    - seafile
+    maintainers:
+    - email: git@schmitz-quiddelbach.de
+      name: Michael Schmitz
+    name: seafile
+    sources:
+    - https://github.com/schmitzis/helm-charts
+    urls:
+    - https://github.com/Schmitzis/helm-charts/releases/download/seafile-13.0.11/seafile-13.0.11.tgz
+    version: 13.0.11
+  - apiVersion: v2
     appVersion: "13.0"
     created: "2026-02-19T21:44:41.266860116Z"
     description: Seafile Server, Reliable and Performant File Sync and Share Solution
@@ -2697,4 +2714,4 @@ entries:
     urls:
     - https://github.com/Schmitzis/helm-charts/releases/download/wekan-1.1.0/wekan-1.1.0.tgz
     version: 1.1.0
-generated: "2026-02-19T21:44:41.267417107Z"
+generated: "2026-09-25T07:20:35.368258873Z"
