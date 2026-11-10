@@ -1,5 +1,7 @@
-image: schmitzis/monorepo:seafile-13.0-latest
-pullPolicy: IfNotPresent
+image: schmitzis/monorepo:seafile-14.0.9
+# Always matches the previous hardcoded behaviour; the deployment templates
+# honour this value now.
+pullPolicy: Always
 imagePullSecret: ""
 
 pvc:
@@ -55,7 +57,7 @@ ingress:
 
 notification:
   enabled: true
-  image: seafileltd/notification-server:13.0.21
+  image: seafileltd/notification-server:14.0.8
   imagePullPolicy: IfNotPresent
   logToStdout: "true"
   logLevel: info
@@ -69,7 +71,7 @@ notification:
 
 seadoc:
   enabled: false
-  image: seafileltd/sdoc-server:2.0.9
+  image: seafileltd/sdoc-server:3.0.8
   imagePullPolicy: IfNotPresent
   resources:
     requests:
@@ -80,7 +82,7 @@ seadoc:
       memory: "1Gi"
 
 redis:
-  image: redis:8.10.2
+  image: redis:8.10.3
   imagePullPolicy: IfNotPresent
   resources:
     requests:

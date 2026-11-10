@@ -1,8 +1,8 @@
 apiVersion: v2
 description: Generic Seafile Deployment.
 name: seafile
-version: 13.0.13
-appVersion: "13.0-latest"
+version: 14.0.0
+appVersion: "14.0.9"
 keywords:
 - seafile
 home: https://github.com/schmitzis/helm-charts

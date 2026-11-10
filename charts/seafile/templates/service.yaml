@@ -14,4 +14,6 @@ spec:
 
   ports:
   - port: 80
-    targetPort: 80
+    # The nginx sidecar listens on 8081; 80 is reserved for the optional
+    # sdoc-server sidecar in the shared pod network namespace.
+    targetPort: 8081

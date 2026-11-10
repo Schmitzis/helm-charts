@@ -38,7 +38,7 @@ spec:
       {{ end }}
       initContainers:
       - image: {{ .Values.image }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.pullPolicy }}
         name: seafile-init
         command:
         - /bin/bash
@@ -67,7 +67,7 @@ spec:
 
       containers:
       - image: {{ .Values.image }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.pullPolicy }}
         name: seafile
         envFrom:
         - secretRef:
@@ -80,11 +80,13 @@ spec:
         - name: ENABLE_SEADOC
           value: {{ .Values.seadoc.enabled | quote }}
         - name: ENABLE_NOTIFICATION_SERVER
-          value: "true"
+          value: {{ .Values.notification.enabled | quote }}
+        {{- if .Values.notification.enabled }}
         - name: NOTIFICATION_SERVER_URL
           value: "http://127.0.0.1:8083"
         - name: INNER_NOTIFICATION_SERVER_URL
           value: "http://127.0.0.1:8083"
+        {{- end }}
         volumeMounts:
         - name: data
           mountPath: /shared
@@ -237,8 +239,10 @@ spec:
         - name: SEADOC_SERVER_HOST
           value: "127.0.0.1"
         ports:
+        # 8081: port 80 must stay free for the sdoc-server sidecar, which can
+        # only listen on 80 and shares the pod network namespace.
         - name: http
-          containerPort: 80
+          containerPort: 8081
         readinessProbe:
           httpGet:
             path: /
