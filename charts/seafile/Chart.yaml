@@ -1,7 +1,7 @@
 apiVersion: v2
 description: Generic Seafile Deployment.
 name: seafile
-version: 14.0.0
+version: 14.0.1
 appVersion: "14.0.9"
 keywords:
 - seafile

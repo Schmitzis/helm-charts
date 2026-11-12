@@ -57,7 +57,7 @@ ingress:
 
 notification:
   enabled: true
-  image: seafileltd/notification-server:14.0.8
+  image: seafileltd/notification-server:14.0.10
   imagePullPolicy: IfNotPresent
   logToStdout: "true"
   logLevel: info
@@ -71,7 +71,7 @@ notification:
 
 seadoc:
   enabled: false
-  image: seafileltd/sdoc-server:3.0.8
+  image: seafileltd/sdoc-server:3.0.9
   imagePullPolicy: IfNotPresent
   resources:
     requests:
